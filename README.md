@@ -63,8 +63,9 @@ information in their own Readme.
 
 If you notice a problem with a recipe please contact the recipe contributor directly
 rather than raise an issue.  You can visit the contributor's github account at
-
+```
 https://github.com/{contributor_name}
+```
 
 ## Notes to Contributors
 
