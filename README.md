@@ -32,12 +32,7 @@ To create a new amber app from this recipe at the command line type
 amber new newapp -r damianham/default
 ```
 to create a new amber app from the recipe at damianham/default.zip in the
-folder newapp.  recipes should contain the following templates:
-
-- app
-- controller
-- model
-- scaffold
+folder newapp.  
 
 ## Using a template in a local folder
 You can use a local folder as the source template for a new amber application e.g.
@@ -79,6 +74,15 @@ you can also use **.lqd** which is an unknown or unnassigned file extension.  To
 new recipe fork https://github.com/amberframework/recipes, clone your fork, create a new
 sub folder with your github username,
 extract an existing recipe, make your modifications and create a zip file and README.md
-in your sub folder.  Don't forget to add an entry to Contributions.md about your recipe.
+in your sub folder.  
+
+Recipes should contain the following templates:
+
+- app
+- controller
+- model
+- scaffold
+
+Don't forget to add an entry to Contributions.md about your recipe.
 
 Many Thanks.
