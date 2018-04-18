@@ -1,0 +1,36 @@
+{% if model == "granite" %}
+class {{class_name}} < Granite::ORM::Base
+  adapter {{database}}
+  table_name {{table_name}}
+
+{% for field in fields %}
+  {% if field.type == "reference" %}
+  belongs_to :{{field.name}}
+  {% endif %}
+{% endfor %}
+
+  # id : Int64 primary key is created for you
+{% for field in fields %}
+  {% if field.type != "reference" %}
+  {% if field.hidden == false %}
+  field {{field.name}} : {{field.cr_type}}
+  {% endif %}
+  {% endif %}
+{% endfor %}
+end
+
+{% else %}
+class {{class_name}} < Crecto::Model
+  schema {{table_name}} do
+  {% for field in fields %}
+    {% if field.hidden == false %}
+    {% if field.type == "reference" %}
+    belongs_to :{{field.name}}, {{field.name | camelcase}}
+    {% else %}
+    field {{field.name}}, {{field.cr_type}}
+    {% endif %}
+    {% endif %}
+  {% endfor %}
+  end
+end
+{% endif %}

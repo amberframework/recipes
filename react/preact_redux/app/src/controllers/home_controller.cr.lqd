@@ -1,0 +1,21 @@
+require "jwt"
+
+class HomeController < ApplicationController
+  def index
+    if current_user
+      render("app.slang", "spa.slang")
+    else
+      render("index.slang")
+    end
+  end
+
+  def me
+    if (user = current_user)
+      token = JWT.encode({id: user.id, email: user.email}, Amber.settings.secret_key_base, "HS256")
+      user_hash = {id: user.id, email: user.email}
+      {user: user_hash, token: token, csrf: csrf_token}.to_json
+    else
+      context.response.respond_with_error("Bad Request", 400)
+    end
+  end
+end
