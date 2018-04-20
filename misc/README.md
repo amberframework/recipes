@@ -1,12 +1,4 @@
 
-## default
-
-A copy of the amber built in app template to test the process of using a template
-from github.  Create a new amber app with this template with the command;
-
-```
-amber new mynewapp -r basic/default
-```
 
 ## modular
 
@@ -25,5 +17,5 @@ A recipe that organises controller, model and views into modules e.g.
 Create a new amber app with this template with the command;
 
 ```
-amber new mynewapp -r basic/modular
+amber new mynewapp -r misc/modular
 ```
