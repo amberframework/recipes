@@ -12,14 +12,15 @@ build_zip() {
 }
 
 check_zip() {
-  dist=dist/`dirname $1 | sed -e 's#./##'`
+  dist=dist/`dirname $1`
   zip=`basename $1`
   dest=${dist}/${zip}
 
-  #echo "check_zip" $dist, $zip, $dest
+  #echo "check_zip" $1, $dist, $zip, $dest
 
   result=`find $1 -newer ${dest}.zip`
-  if [ ! -z $result ]; then
+  #echo $result
+  if [ ! -z "$result" ]; then
     build_zip $1 $dist $zip $dest
   fi
 }
@@ -27,7 +28,7 @@ check_zip() {
 find_recipes() {
   for f in `find . -name 'app' -type d`
   do
-    check_zip `dirname $f`
+    check_zip `dirname $f | sed -e 's#./##'`
   done
 }
 
