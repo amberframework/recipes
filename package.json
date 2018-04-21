@@ -1,0 +1,11 @@
+{
+  "name": "recipes",
+  "version": "0.1.0",
+  "description": "Code generation recipes for Amber Framework",
+  "private": true,
+  "author": "Amber",
+  "license": "MIT",
+  "scripts": {
+    "build": "bash scripts/build_zips.sh"
+  }
+}

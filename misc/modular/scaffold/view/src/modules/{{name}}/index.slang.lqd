@@ -1,0 +1,24 @@
+div.row
+  div.col-sm-11
+    h2 {{ display_name | pluralize }}
+  div.col-sm-1
+    a.btn.btn-success.btn-xs href="/{{ name | pluralize }}/new" New
+div.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        {% for field in visible_fields %}
+        th {{ field.name | capitalize }}
+        {% endfor %}
+        th Actions
+    tbody
+      - {{ name | pluralize }}.each do |{{ name }}|
+        tr
+          {% for field in visible_fields %}
+          td = {{ name }}.{{ field.name }}{% if field.type == "reference" %}.id{% endif %}
+          {% endfor %}
+          td
+            span
+            == link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-success btn-xs")
+            == link_to("edit", "/{{ name | pluralize }}/#{ {{ name }}.id }/edit", class: "btn btn-success btn-xs")
+            == link_to("delete", "/{{ name | pluralize }}/#{ {{ name }}.id }?_csrf=#{csrf_token}", "data-method": "delete", "data-confirm": "Are you sure?", class: "btn btn-danger btn-xs")

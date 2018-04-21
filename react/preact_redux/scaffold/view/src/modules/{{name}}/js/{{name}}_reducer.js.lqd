@@ -1,0 +1,33 @@
+'use strict';
+import * as ACTION_TYPES from '../../js/action-types';
+
+export const {{name | pluralize }} = (state = [], action) => {
+  switch (action.type) {
+    case ACTION_TYPES.ACTION_LOAD_{{name | pluralize | upcase}}:
+      return [...action.payload];
+    case ACTION_TYPES.ACTION_SAVE_{{name | upcase}}:
+      return [
+          ...state.filter({{name}} => {{name}}.id !== action.payload.id),
+          Object.assign({}, action.payload)
+        ]
+    case ACTION_TYPES.ACTION_DELETE_{{name | upcase}}:
+      console.log('reduce {{name}} with', action)
+      return state.filter(({ id }) => id !== action.payload.id);
+
+    default:
+      return state;
+  }
+};
+
+
+export const {{name}} = (state = {}, action) => {
+  switch (action.type) {
+    case ACTION_TYPES.ACTION_SHOW_{{name | upcase}}:
+    case ACTION_TYPES.ACTION_NEW_{{name | upcase}}:
+    case ACTION_TYPES.ACTION_EDIT_{{name | upcase}}:
+      return action.payload;
+
+    default:
+      return state;
+  }
+};
