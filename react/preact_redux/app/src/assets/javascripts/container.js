@@ -41,6 +41,11 @@ export default class Container extends Component {
       return Auth.isUserAuthenticated() && this.state && this.state.current_user
     }
 
+    signOut() {
+      Auth.deauthenticateUser();
+      window.location = "/signout";
+    }
+
     render() {
         const {current} = this.props;
 
@@ -69,7 +74,7 @@ export default class Container extends Component {
                 }
 
                 { this.isAuthenticated() && this.state.current_user ? (
-                    <Link className='nav-item pull-right' to='/signout'>Sign Out</Link>
+                    <div className='nav-item pull-right' onClick={this.signOut}>Sign Out</div>
                   ) : (
                     <a className='nav-item pull-right' href='/signin'>Sign In</a>
                   )
