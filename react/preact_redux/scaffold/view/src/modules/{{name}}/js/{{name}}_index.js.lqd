@@ -4,7 +4,13 @@ import React, {Component} from 'react';
 import { {{class_name}}, {{class_name}}IndexItem} from "./{{name}}";
 
 export default class {{class_name}}Index extends Component {
+
   componentWillMount() {
+  {% for field in visible_fields %}
+  {% if field.type == "reference" %}
+    this.props.actions.load{{field.name | camelcase | pluralize}}();
+  {% endif %}
+  {% endfor %}
     this.props.actions.load{{class_name | pluralize}}();
   }
   show{{class_name}}(props) {

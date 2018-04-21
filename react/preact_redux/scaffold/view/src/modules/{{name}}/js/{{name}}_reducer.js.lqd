@@ -3,7 +3,7 @@ import * as ACTION_TYPES from '../../js/action-types';
 
 export const {{name | pluralize }} = (state = [], action) => {
   switch (action.type) {
-    case ACTION_TYPES.ACTION_LOAD_{{name | upcase}}S:
+    case ACTION_TYPES.ACTION_LOAD_{{name | pluralize | upcase}}:
       return [...action.payload];
     case ACTION_TYPES.ACTION_SAVE_{{name | upcase}}:
       return [

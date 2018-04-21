@@ -2,43 +2,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import {optionsForClass} from '../../../lib/js/utils';
 import Resource from '../../../lib/js/resource';
+import {store} from '../../js/store';
 
 export default class {{class_name}}Form extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.options = {};
-  }
-
-  bestTitleForClass(item) {
-    return item.title || item.name || item.username || item.email || item.id
-  }
-
-  optionsForReference(endpoint) {
-    if (this.options[endpoint]) {
-      return this.options[endpoint];
-    }
-
-    let vm = this;
-
-    // get a list of reference types
-    let refs = new Resource(endpoint);
-
-    refs.all().then((data) => {
-      if (data) {
-        let options = []
-        data.forEach((item) => {
-          options.push({value: item.id, name: vm.bestTitleForClass(item)})
-        });
-        vm.options[endpoint] = options;
-        vm.setState({ });
-      }
-    }).catch(e => {
-      console.log('error getting refs', e.responseJSON.error)
-    });
-
-    return [];
   }
 
   render() {
@@ -80,12 +52,11 @@ export default class {{class_name}}Form extends Component {
               value={ this.props.{{name}}.{{field.name}}_id }
               onChange={this.props.onChange}
             >
-            { this.optionsForReference("{{field.name | pluralize}}").map((opt) => {
-              return (
-                <option value={opt.value}>{opt.name}</option>
-              )
-            })
-
+            { optionsForClass(store, "{{field.name | pluralize}}").map((opt) => {
+                return (
+                  <option value={opt.value}>{opt.name}</option>
+                )
+              })
             }
             </select>
             {% else %}

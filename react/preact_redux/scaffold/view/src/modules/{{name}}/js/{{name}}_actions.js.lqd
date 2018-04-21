@@ -15,7 +15,7 @@ export const load{{class_name | pluralize}} = () => {
 
       resource.all().then({{name | pluralize }} => {
           dispatch({
-            type: ACTION_TYPES.ACTION_LOAD_{{name | upcase}}S,
+            type: ACTION_TYPES.ACTION_LOAD_{{name | pluralize | upcase}},
             payload: {{name | pluralize }}
           })
         }
@@ -81,14 +81,14 @@ export const delete{{class_name}} = {{name}} => {
   return dispatch => {
     let resource = new Resource("/{{name | pluralize }}", {{name}});
     resource.destroy().then(() => {
-      EventBus.emit('notify:success', "Deleted {{class_name | pluralize}} successfully" );
+      EventBus.emit('notify:success', "Deleted {{class_name}} successfully" );
       dispatch({
         type: ACTION_TYPES.ACTION_DELETE_{{name | upcase}},
         payload: {{name}}
       });
       dispatch(replace('/{{name | pluralize }}/'));
     }).fail((xhr,error) => {
-      EventBus.emit('notify:error', "Could not delete {{class_name | pluralize}} - " + xhr.responseJSON.errors.join(', ') );
+      EventBus.emit('notify:error', "Could not delete {{class_name}} - " + xhr.responseJSON.errors.join(', ') );
     });
 
   };

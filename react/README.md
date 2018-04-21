@@ -9,3 +9,6 @@ Create a new amber app with this template with the command;
 ```
 amber new mynewapp -r react/preact_redux
 ```
+Notes:  yarn or npm install issue warnings about unmet dependencies for react.  this
+is normal as react is provided by preact via the preact-compat shim.
+ 
