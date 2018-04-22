@@ -1,0 +1,106 @@
+require "./spec_helper"
+
+def {{ name | underscore }}_hash
+  {{ fields_hash }}
+end
+
+def {{ name | underscore }}_params
+  params = [] of String
+  {%- for field in visible_fields %}
+  params << "{{ field.name }} =#{ {{ name| underscore }}_hash["{{ field.name }}"] }"
+  {%- endfor %}
+  params.join("&")
+end
+
+def create_{{ name | underscore }}
+  model = {{ class_name }}.new({{ name | underscore }}_hash)
+  model.save
+  model
+end
+
+class {{ class_name }}ControllerTest < GarnetSpec::Controller::Test
+  getter handler : Amber::Pipe::Pipeline
+
+  def initialize
+    @handler = Amber::Pipe::Pipeline.new
+    @handler.build :web do
+      plug Amber::Pipe::Error.new
+      plug Amber::Pipe::Session.new
+      plug Amber::Pipe::Flash.new
+    end
+    @handler.prepare_pipelines
+  end
+end
+
+describe {{ class_name }}ControllerTest do
+  subject = {{ class_name }}ControllerTest.new
+
+  it "renders {{ name }} index template" do
+    {{ class_name }}.clear
+    response = subject.get "/{{ name | pluralize }}"
+
+    response.status_code.should eq(200)
+    response.body.should contain("{{ display_name | pluralize }}")
+  end
+
+  it "renders {{ name }} show template" do
+    {{ class_name }}.clear
+    model = create_{{ name | underscore }}
+    location = "/{{ name | pluralize }}/#{model.id}"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("Show {{ display_name }}")
+  end
+
+  it "renders {{ name }} new template" do
+    {{ class_name }}.clear
+    location = "/{{ name | pluralize }}/new"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("New {{ display_name }}")
+  end
+
+  it "renders {{ name }} edit template" do
+    {{ class_name }}.clear
+    model = create_{{ name | underscore }}
+    location = "/{{ name | pluralize }}/#{model.id}/edit"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("Edit {{ display_name }}")
+  end
+
+  it "creates a {{ name }}" do
+    {{ class_name }}.clear
+    response = subject.post "/{{ name | pluralize }}", body: {{ name | underscore }}_params
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+
+  it "updates a {{ name }}" do
+    {{ class_name }}.clear
+    model = create_{{ name | underscore }}
+    response = subject.patch "/{{ name | pluralize }}/#{model.id}", body: {{ name | underscore }}_params
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+
+  it "deletes a {{ name }}" do
+    {{ class_name }}.clear
+    model = create_{{ name | underscore }}
+    response = subject.delete "/{{ name | pluralize }}/#{model.id}"
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+end

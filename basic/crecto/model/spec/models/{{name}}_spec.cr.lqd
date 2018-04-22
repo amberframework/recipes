@@ -1,0 +1,10 @@
+
+require "./spec_helper"
+require "../../src/modules/{{name}}/{{name}}.cr"
+
+describe {{class_name}} do
+  Spec.before_each do
+    multi = Multi.new
+    multi.delete_all({{class_name}}) 
+  end
+end

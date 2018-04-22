@@ -1,0 +1,10 @@
+<h1>Show {{ display_name }}</h1>
+
+{% for field in visible_fields %}
+<p><%= {{ name }}.{{ field.name }}{% if field.type == "reference" %}.id{% endif %} %></p>
+{% endfor %}
+<p>
+  <%= link_to("back", "/{{ name | pluralize }}s", class: "btn btn-success btn-xs") -%>
+  <%= link_to("edit", "/{{ name | pluralize }}/#{ {{ name }}.id }/edit", class: "btn btn-success btn-xs") -%>
+  <%= link_to("delete", "/{{ name | pluralize }}/#{ {{ name }}.id }?_csrf=#{csrf_token}", "data-method": "delete", "data-confirm": "Are you sure?", class: "btn btn-danger btn-xs") -%>
+</p>

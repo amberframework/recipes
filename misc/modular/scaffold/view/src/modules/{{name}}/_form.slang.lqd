@@ -1,0 +1,24 @@
+- if {% if model == "crecto" %} changeset{% else %}{{ name }}{% endif %}.errors
+  ul.errors
+    - {% if model == "crecto" %} changeset{% else %}{{ name }}{% endif %}.errors.each do |error|
+      li = error.to_s
+
+== form(action: "/{{ name | pluralize }}/#{ {{ name }}.id.to_s }", method: {{ name }}.id ? :patch : :post) do
+  == csrf_tag
+{% for field in visible_fields %}
+  div.form-group
+  {% if field.type == "text" %}
+    == text_area(name: "{{ field.name }}", content: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control", size: "30x10")
+  {% elsif field.type == "boolean" %}
+    div.checkbox
+      == label(:{{ field.name }}) do
+        == check_box(:{{ field.name }}, checked: {{ name }}.{{ field.name }}.to_s == "1" )
+  {% elsif field.type == "reference" %}
+    == label(:{{ field.name }})
+    == select_field(name: "{{ field.name }}_id", collection: {{ field.name | capitalize }}.all.map{|{{ field.name }}| [{{ field.name }}.id, {{ field.name }}.id]}, selected: {{ name }}.{{ field.name }}_id, class: "form-control")
+  {% else %}
+    == text_field(name: "{{ field.name }}", value: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control")
+  {% endif %}
+{% endfor %}
+  == submit("Submit", class: "btn btn-primary btn-xs")
+  == link_to("back", "/{{ name | pluralize }}", class: "btn btn-default btn-xs")
