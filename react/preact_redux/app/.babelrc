@@ -1,0 +1,10 @@
+{
+  "sourceMaps": true,
+  "presets": [
+    "env", "react"
+  ],
+  "plugins": [
+    ["transform-decorators-legacy"],
+    ["transform-es2015-spread"]
+  ]
+}
