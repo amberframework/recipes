@@ -44,11 +44,11 @@ export default class {{class_name}}Index extends Component {
         <div className="table-responsive {{name}}-index-table">
           <table className="table table-striped">
             <thead>
-              <tr className="{{name}}-index.table-head-row index-table-head-row">
+              <tr className="{{name}}-index-table-head-row index-table-head-row">
               {% for field in visible_fields %}
                 <th className="{{name}}-index-table-head index-table-head">{{field.name | capitalize }}</th>
               {% endfor %}
-                <th>Actions</th>
+                <th className="{{name}}-index-table-head index-table-head">Actions</th>
               </tr>
             </thead>
 

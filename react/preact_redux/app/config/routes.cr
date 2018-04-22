@@ -23,6 +23,7 @@ Amber::Server.configure do |app|
   end
 
   routes :web do
+    get "/authenticateWithToken", HomeController, :authenticate_jwt
     get "/me", HomeController, :me
     websocket "/model", ModelSocket
     websocket "/signal", SignalSocket

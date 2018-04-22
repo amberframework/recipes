@@ -18,4 +18,21 @@ class HomeController < ApplicationController
       context.response.respond_with_error("Bad Request", 400)
     end
   end
+  
+  def authenticate_jwt
+    if params["token"]
+      payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
+      user = User.find_by(:email, payload["email"].to_s)
+    end
+
+    if user
+      session[:user_id] = user.id
+      # create a new token for this session
+      user_hash = {id: user.id, email: user.email}
+      token = JWT.encode(user_hash, Amber.settings.secret_key_base, "HS256")
+      {user: user_hash, token: token, csrf: csrf_token}.to_json
+    else
+      context.response.respond_with_error("Bad Request", 400)
+    end
+  end
 end

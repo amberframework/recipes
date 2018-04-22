@@ -192,7 +192,7 @@ export class {{class_name}}IndexItem extends Component {
           >read</div>
 
           <div onClick={()=>edit{{class_name}}(this.props)}
-          className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
+          className="col btn btn-success btn-xs {{name}}-index-actions-edit index-actions-edit"
           >edit</div>
 
           <div onClick={this.confirmDelete}

@@ -2,6 +2,12 @@
 
 .{{name}}-index-column {}
 
+.{{name}}-index-table-head-row {}
+
+.{{name}}-index-table-head {}
+
+.{{name}}-index-table-data {}
+
 .{{name}}-index-actions-row {}
 
 .{{name}}-index-actions-column {}
