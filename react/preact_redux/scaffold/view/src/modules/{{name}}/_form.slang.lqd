@@ -8,16 +8,16 @@
 {% for field in visible_fields %}
   div.form-group
   {% if field.type == "text" %}
-    == text_area(name: "{{ field.name }}", content: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control", size: "30x10")
+    == text_area(name: "{{ field.name }}", content: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data", size: "30x10")
   {% elsif field.type == "boolean" %}
     div.checkbox
       == label(:{{ field.name }}) do
         == check_box(:{{ field.name }}, checked: {{ name }}.{{ field.name }}.to_s == "1" )
   {% elsif field.type == "reference" %}
     == label(:{{ field.name }})
-    == select_field(name: "{{ field.name }}_id", collection: {{ field.name | capitalize }}.all.map{|{{ field.name }}| [{{ field.name }}.id, {{ field.name }}.id]}, selected: {{ name }}.{{ field.name }}_id, class: "form-control")
+    == select_field(name: "{{ field.name }}_id", collection: {{ field.name | capitalize }}.all.map{|{{ field.name }}| [{{ field.name }}.id, {{ field.name }}.id]}, selected: {{ name }}.{{ field.name }}_id, class: "form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data")
   {% else %}
-    == text_field(name: "{{ field.name }}", value: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control")
+    == text_field(name: "{{ field.name }}", value: {{ name }}.{{ field.name }}, placeholder: "{{ field.name | capitalize }}", class: "form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data")
   {% endif %}
 {% endfor %}
   == submit("Submit", class: "btn btn-primary btn-xs")
