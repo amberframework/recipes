@@ -10,7 +10,7 @@
 
 .{{name}}-index-actions-row {}
 
-.{{name}}-index-actions-column {}
+.{{name}}-index-actions {}
 
 .{{name}}-index-actions-read {}
 
@@ -18,10 +18,10 @@
 
 .{{name}}-index-actions-delete {}
 
-.{{name}}-view-header-column {}
+.{{name}}-view-header {}
 
-.{{name}}-view-data-column {}
+.{{name}}-view-data {}
 
-.{{name}}-edit-header-column {}
+.{{name}}-edit-header {}
 
-.{{name}}-edit-data-column {}
+.{{name}}-edit-data {}

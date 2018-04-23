@@ -103,13 +103,13 @@ export class {{class_name}} extends Component {
       {% for field in visible_fields %}
       {% if field.type == "reference" %}
         <div className="row">
-          <div className="col-sm-2 {{name}}-view-header-column view-header-column">{{ field.name | capitalize }}</div>
-          <div className="col-sm-10 {{name}}-view-data-column view-data-column">{ titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }</div>
+          <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
+          <div className="col-sm-10 {{name}}-view-data view-data">{ titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }</div>
         </div>
       {% else %}
         <div className="row">
-          <div className="col-sm-2 {{name}}-view-header-column view-header-column">{{ field.name | capitalize }}</div>
-          <div className="col-sm-10 {{name}}-view-data-column view-data-column">{ {{name}}.{{field.name}} }</div>
+          <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
+          <div className="col-sm-10 {{name}}-view-data view-data">{ {{name}}.{{field.name}} }</div>
         </div>
       {% endif %}
       {% endfor %}
@@ -131,7 +131,7 @@ export class {{class_name}} extends Component {
               onClick={this.confirmDelete}
               className="btn btn-danger btn-xs {{name}}-view-delete view-delete">
               delete
-            </div> 
+            </div>
           </div>
         }
 
@@ -197,7 +197,7 @@ export class {{class_name}}IndexItem extends Component {
       {% endfor %}
 
       { canEdit{{class_name}} ? (
-        <td className="col {{name}}-index-actions-column index-actions-column">
+        <td className="col {{name}}-index-actions index-actions">
           <div onClick={()=>show{{class_name}}(this.props)}
           className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
           >read</div>
@@ -213,7 +213,7 @@ export class {{class_name}}IndexItem extends Component {
           </div>
         </td>
       ) : (
-        <td className="col {{name}}-index-actions-column index-actions-column">
+        <td className="col {{name}}-index-actions index-actions">
           <div onClick={()=>show{{class_name}}(this.props)}
           className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
           >read</div>
