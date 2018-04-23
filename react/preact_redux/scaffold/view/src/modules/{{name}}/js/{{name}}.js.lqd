@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { confirmAlert } from 'react-confirm-alert';
 import Auth from '../../../lib/js/auth';
-import {titleForId} from '../../../lib/js/utils';
+import {canEditItem, titleForId} from '../../../lib/js/utils';
 import {store} from '../../js/store';
 
 import {{class_name}}Form from './{{name}}_form';
@@ -94,6 +94,8 @@ export class {{class_name}} extends Component {
       )
     }
 
+    let canEdit{{class_name}} = canEditItem({{name}});
+
     return (
       <div>
       <h2 className="{{name}}-view-title view-title">Show {{class_name}}</h2>
@@ -116,16 +118,22 @@ export class {{class_name}} extends Component {
         className="btn btn-success btn-xs {{name}}-view-back view-back">
           Back
         </div>
-        <div onClick={this.toggleEdit}
-        className="btn btn-success btn-xs {{name}}-view-edit view-edit"
-        >edit</div>
 
-        <div onClick={this.confirmDelete}
-        className="btn btn-danger btn-xs {{name}}-view-delete view-delete"
-          >
-          delete
-        </div>
-      </div>
+        { canEditArticle &&
+          <div>
+            <div
+              onClick={this.toggleEdit}
+              className="btn btn-success btn-xs {{name}}-view-edit view-edit">
+              edit
+            </div>
+
+            <div
+              onClick={this.confirmDelete}
+              className="btn btn-danger btn-xs {{name}}-view-delete view-delete">
+              delete
+            </div> 
+          </div>
+        }
 
     );
   }
@@ -171,6 +179,8 @@ export class {{class_name}}IndexItem extends Component {
       {{name}} = this.props.{{name}};
     }
 
+    let canEdit{{class_name}} = canEditItem({{name}});
+
     return (
       <tr className="{{name}}-index-table-row index-table-row" >
 
@@ -186,6 +196,7 @@ export class {{class_name}}IndexItem extends Component {
         {% endif %}
       {% endfor %}
 
+      { canEdit{{class_name}} ? (
         <td className="col {{name}}-index-actions-column index-actions-column">
           <div onClick={()=>show{{class_name}}(this.props)}
           className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
@@ -201,6 +212,17 @@ export class {{class_name}}IndexItem extends Component {
             delete
           </div>
         </td>
+      ) : (
+        <td className="col {{name}}-index-actions-column index-actions-column">
+          <div onClick={()=>show{{class_name}}(this.props)}
+          className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
+          >read</div>
+        </td>
+      )
+
+      }
+
+
       </tr>
 
     );
