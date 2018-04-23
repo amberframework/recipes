@@ -3,7 +3,10 @@ import React from 'react';
 import {render} from 'react-dom';
 import App from './app';
 
-render(
-  <App />,
-  document.getElementById("{{name}}_app")
-)
+document.addEventListener('DOMContentLoaded', function() {
+  let componentEntry = document.getElementById("{{name}}_app");
+  if (componentEntry) {
+    render(<App />,
+        document.getElementById("{{name}}_app"));
+  }
+});
