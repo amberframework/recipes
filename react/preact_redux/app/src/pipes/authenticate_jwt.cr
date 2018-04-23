@@ -6,8 +6,12 @@ class AuthenticateJWT < Amber::Pipe::Base
   PUBLIC_PATHS = ["/", "/signin", "/session", "/signup", "/registration"]
 
   def call(context)
-    user_id = context.session["user_id"]?
-    if user = User.find user_id
+    if params["token"]
+      payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
+      user = User.find_by(:email, payload["email"].to_s)
+    end
+
+    if user
       context.current_user = user
       call_next(context)
     else
