@@ -7,7 +7,7 @@ end
 def {{ name | underscore }}_params
   params = [] of String
 {% for field in visible_fields %}
-  params << "{{ field.name }} =#{ {{ name| underscore }}_hash["{{ field.name }}"] }"
+  params << "{{ field.name }}=#{ {{ name| underscore }}_hash["{{ field.name }}"] }"
 {% endfor %}
   params.join("&")
 end
