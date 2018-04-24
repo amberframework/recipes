@@ -69,7 +69,7 @@ class {{ class_name }}Controller < ApplicationController
 
   def update
 {% if model == "granite" %}
-    if {{ name }} = {{ class_name }}.find params["id"]
+    if {{ name }} = {{ class_name }}.find(params["id"])
       {{ name }}.set_attributes({{ name }}_params.validate!)
       if {{ name }}.valid? && {{ name }}.save
         flash["success"] = "Updated {{ class_name }} successfully."
