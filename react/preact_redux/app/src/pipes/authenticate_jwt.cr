@@ -5,10 +5,15 @@ end
 class AuthenticateJWT < Amber::Pipe::Base
   PUBLIC_PATHS = ["/", "/signin", "/session", "/signup", "/registration"]
 
+  # add the names of the app modules
+  REGEX_PATHS = [
+    %r(/some_model_name(/\d+)?$)
+  ]
+
   def call(context)
-    if params["token"]
-      payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
-      user = User.find_by(:email, payload["email"].to_s)
+    if context.params["token"]
+      payload, header = JWT.decode(context.params["token"], Amber.settings.secret_key_base, "HS256")
+      user = User.find_by(:email, payload["email"].to_s) unless payload["email"]?.nil?
     end
 
     if user
@@ -23,7 +28,7 @@ class AuthenticateJWT < Amber::Pipe::Base
   end
 
   private def public_path?(path)
-    PUBLIC_PATHS.includes?(path)
+    return true if PUBLIC_PATHS.includes?(path)
 
     # Different strategies can be used to determine if a path is public
     # Example, if /admin/* paths are the only private paths
@@ -31,6 +36,7 @@ class AuthenticateJWT < Amber::Pipe::Base
     #
     # Example, if only a few private paths exist
     # return false if ["/secret", "/super/secret", "/private"].includes?(path)
+    REGEX_PATHS.count{|r| r.match(path)} > 0
   end
 
 end

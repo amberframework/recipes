@@ -12,6 +12,8 @@ Amber::Server.configure do |app|
     plug Amber::Pipe::CSRF.new
     # Reload clients browsers (development only)
     plug Amber::Pipe::Reload.new if Amber.env.development?
+
+    plug AuthenticateJWT.new
   end
 
   # All static content will run these transformations
