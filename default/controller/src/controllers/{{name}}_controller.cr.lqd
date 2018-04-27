@@ -1,0 +1,8 @@
+class {{class_name}}Controller < ApplicationController
+# generated from {{recipe}} recipe
+{% for action in action_names %}
+  def {{action}}
+    render("{{action}}.{{language}}")
+  end
+{% endfor %}
+end
