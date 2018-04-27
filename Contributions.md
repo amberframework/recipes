@@ -3,19 +3,19 @@
 
 - default
 
-A copy of the amber built in app template to test the process of using a template
-from github.  Create a new amber app with this template with the command;
+A copy of the amber built in app template to generate an amber app like the
+built-in application template.  Create a new amber app with this template with the command;
 
 ```
 amber new mynewapp -r default
 ```
 
+## Recipe Themes
+
 ### Basic recipes
 [basic](https://github.com/amberframework/recipes/blob/master/basic)
 - granite default template using Granite ORM only
 - crecto default template using Crecto ORM only
-
-## Recipe Themes
 
 ### Miscellaneous
 [misc](https://github.com/amberframework/recipes/blob/master/misc)
