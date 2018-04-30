@@ -24,7 +24,7 @@ describe "Compile available recipes" do
     cleanup
   end
 
-  # TODO: Looks like modular recipe is broken, need some repairs, see 
+  # TODO: Looks like modular recipe is broken 
   # it "compiles misc/modular recipe" do
   #   generate_app recipe: "misc/modular"
   #   build_app.should be_true
