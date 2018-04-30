@@ -1,3 +1,5 @@
 /amber/
 /app/
 /lib/
+/.shards/
+shard.lock
