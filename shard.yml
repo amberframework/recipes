@@ -4,6 +4,10 @@ version: 0.1.0
 authors:
   - Amber Team and contributors <amberframework.org>
 
+targets:
+  amber:
+    main: lib/amber/src/amber/cli.cr
+
 description: |
   Code recipes for Amber Framework
 
