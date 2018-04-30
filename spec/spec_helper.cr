@@ -12,7 +12,7 @@ def generate_app(recipe)
   system("cd app && ../bin/amber g scaffold Category title:string")
   system("cd app && ../bin/amber g scaffold Product title:string description:text category:reference")
   system("cd app && ../bin/amber g scaffold Comment body:text product:reference")
-  system("cd app && ../bin/amber db migrate seed")
+  system("cd app && ../bin/amber db migrate")
 end
 
 def build_app
