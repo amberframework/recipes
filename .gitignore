@@ -1,0 +1,6 @@
+/amber/
+/app/
+/lib/
+/bin/
+/.shards/
+shard.lock
