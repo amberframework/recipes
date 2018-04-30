@@ -1,6 +1,6 @@
 
 require "./spec_helper"
-require "../../src/modules/{{name}}/{{name}}.cr"
+require "../../src/models/{{name}}.cr"
 
 describe {{class_name}} do
   Spec.before_each do
@@ -9,6 +9,6 @@ describe {{class_name}} do
     {% else %}
     multi = Multi.new
     multi.delete_all({{class_name}})
-    {% endif}
+    {% endif %}
   end
 end
