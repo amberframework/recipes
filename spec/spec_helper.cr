@@ -9,7 +9,10 @@ def build_amber
 end
 
 def generate_app(recipe)
-  system("amber/bin/amber new app -r #{recipe} --deps")
+  system("amber/bin/amber new app -r `pwd`/#{recipe} --deps")
+  system("cd app && ../amber/bin/amber g scaffold Category title:string")
+  system("cd app && ../amber/bin/amber g scaffold Product title:string description:text category:reference")
+  system("cd app && ../amber/bin/amber g scaffold Comment body:text product:reference")
 end
 
 def build_app
