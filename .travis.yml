@@ -1,0 +1,5 @@
+language: crystal
+
+cache:
+  directories:
+    - amber
