@@ -26,7 +26,7 @@ class {{ class_name }}Controller < ApplicationController
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
       error = {errors: [msg] }
       respond_with 404 do
-        html msg
+        html ->{redirect_to "{{name | pluralize}}", flash: {"warning" => msg}}
         json error.to_json
       end
     end
@@ -46,13 +46,14 @@ class {{ class_name }}Controller < ApplicationController
     {{ name }} = {{ class_name }}.new({{ name }}_params.validate!)
     if {{ name }}.valid? && {{ name }}.save
       respond_with do
-        html render_module("show.{{ language }}")
+        html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Created {{ class_name }} successfully."}}
         json {{ name }}.to_json
       end
     else
       error = {errors: {{ name }}.errors.map{|e| e.to_s} }
+      flash["danger"] = "Could not create {{ class_name }}!"
       respond_with 400 do
-        html "Error Could not create {{ class_name }}<br/>" + {{ name }}.errors.map{|e| e.to_s}.join("<br/>")
+        html render_module("new.{{ language }}")
         json error.to_json
       end
 {% else %}
@@ -62,14 +63,15 @@ class {{ class_name }}Controller < ApplicationController
 
     if changeset.errors.any?
       error = {errors: changeset.errors }
+      flash["danger"] = "Could not create {{ class_name }}!"
       respond_with 400 do
-        html "Error Could not create {{ class_name }}<br/>" + changeset.errors.map{|e| e.to_s}.join("<br/>")
+        html render_module("new.{{ language }}")
         json error.to_json
       end
     else
       {{ name }}.on_created(changeset.changes)
       respond_with do
-        html render_module("show.{{ language }}")
+        html ->{redirect_to "/{{ name | pluralize }}", flash: {"success" => "Created {{ class_name }} successfully."}}
         json {{ name }}.to_json
       end
 {% endif %}
@@ -77,7 +79,7 @@ class {{ class_name }}Controller < ApplicationController
   rescue ex
     error = {errors: [ex.message, params.errors.map{|e| e.message}].flatten}
     respond_with 400 do
-      html "Error Could not create {{class_name}}<br/>" + params.errors.map{|e| e.message}.join(", ")
+      html ->{redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not create {{ class_name }}!"}}
       json error.to_json
     end
   end
@@ -103,13 +105,14 @@ class {{ class_name }}Controller < ApplicationController
       {{ name }}.set_attributes({{ name }}_params.validate!)
       if {{ name }}.valid? && {{ name }}.save
         respond_with do
-          html render_module("show.{{ language }}")
+          html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."}}
           json {{ name }}.to_json
         end
       else
         error = {errors: {{ name }}.errors.map{|e| e.to_s} }
+        flash["danger"] = "Could not update {{ class_name }}!"
         respond_with 400 do
-          html "Error Could not update {{ class_name }}<br/>" + {{ name }}.errors.map{|e| e.to_s}.join("<br/>")
+          html render_module("edit.{{ language }}")
           json error.to_json
         end
       end
@@ -121,14 +124,15 @@ class {{ class_name }}Controller < ApplicationController
 
       if changeset.errors.any?
         error = {errors: changeset.errors }
+        flash["danger"] = "Could not update {{ class_name }}!"
         respond_with 400 do
-          html "Error Could not update {{ class_name }}<br/>" + changeset.errors.map{|e| e.to_s}.join("<br/>")
+          html render_module("edit.{{ language }}")
           json error.to_json
         end
       else
         {{ name }}.on_updated(changeset.changes)
         respond_with do
-          html render_module("edit.{{ language }}")
+          html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."}}
           json {{ name }}.to_json
         end
       end
@@ -137,14 +141,14 @@ class {{ class_name }}Controller < ApplicationController
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
       error = {errors: [msg] }
       respond_with 404 do
-        html msg
+        html ->{redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg}}
         json error.to_json
       end
     end
   rescue ex
     error = {errors: [ex.message, params.errors.map{|e| e.message}].flatten}
     respond_with 400 do
-      html "Error Could not create {{class_name}}<br/>" + params.errors.map{|e| e.message}.join(", ")
+      html ->{redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not update {{ class_name }}!"}}
       json error.to_json
     end
   end
@@ -161,14 +165,14 @@ class {{ class_name }}Controller < ApplicationController
       msg = "{{ class_name }} with ID #{params["id"]} deleted"
       result = {result: msg}
       respond_with do
-        html msg
+        html ->{redirect_to "/{{ name | pluralize }}", flash: {"success" => msg}}
         json result.to_json
       end
     else
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
       error = {errors: [msg] }
       respond_with 404 do
-        html msg
+        html ->{redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg}}
         json error.to_json
       end
     end
