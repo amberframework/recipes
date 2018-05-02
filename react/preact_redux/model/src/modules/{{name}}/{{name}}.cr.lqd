@@ -3,89 +3,34 @@ class {{class_name}} < Granite::ORM::Base
   adapter {{database}}
   table_name {{table_name}}
 
-  property saved_attributes = {} of String => DB::Any
-
-  after_create :on_created
-  before_update :dup_attributes
-  after_update :on_updated
-  after_destroy :on_deleted
-
 {% for field in fields %}
-{% if field.type == "reference" %}
+  {% if field.type == "reference" %}
   belongs_to :{{field.name}}
-{% endif %}
+  {% endif %}
 {% endfor %}
 
   # id : Int64 primary key is created for you
 {% for field in fields %}
-{% if field.type != "reference" %}
-{% if field.hidden == false %}
+  {% if field.type != "reference" %}
+  {% if field.hidden == false %}
   field {{field.name}} : {{field.cr_type}}
-{% endif %}
-{% endif %}
+  {% endif %}
+  {% endif %}
 {% endfor %}
+end
+
 {% else %}
 class {{class_name}} < Crecto::Model
   schema {{table_name}} do
 {% for field in fields %}
 {% if field.hidden == false %}
 {% if field.type == "reference" %}
-    belongs_to :{{field.name}}, {{field.name | camelcase}}
+  belongs_to :{{field.name}}, {{field.name | camelcase}}
 {% else %}
-    field {{field.name}}, {{field.cr_type}}
+  field {{field.name}}, {{field.cr_type}}
 {% endif %}
 {% endif %}
 {% endfor %}
   end
-
-{% endif %}
-
-{% if model == "granite" %}
-  def on_created
-    Sockets::Model.send_model("new", self.to_h)
-  end
-
-  def dup_attributes
-    @saved_attributes = self.to_h
-  end
-
-  def get_changed_attributes
-{% for field in fields %}
-{% if field.hidden == false %}
-{% if field.type == "reference" %}
-    @saved_attributes.delete("{{field.name}}_id") if @saved_attributes["{{field.name}}_id"] == self.{{field.name}}_id
-{% else %}
-    @saved_attributes.delete("{{field.name}}") if @saved_attributes["{{field.name}}"] == self.{{field.name}}
-{% endif %}
-{% else %}
-    @saved_attributes.delete("{{field.name}}")
-{% endif %}
-{% endfor %}
-    @saved_attributes
-  end
-
-  def on_updated
-    changes = get_changed_attributes
-    return if changes.empty?
-    Sockets::Model.send_model("update", changes)
-  end
-
-  def on_deleted
-    Sockets::Model.send_model("delete", { :id => self.id }.to_json )
-  end
-{% else %}
-
-  def on_created(changes)
-    Sockets::Model.send_model("new", changes)
-  end
-
-  def on_updated(changes)
-    Sockets::Model.send_model("update", changes)
-  end
-
-  def on_deleted(id)
-    Sockets::Model.send_model("delete", { :id => id }.to_json )
-  end
-
-{% endif %}
 end
+{% endif}
