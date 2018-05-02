@@ -5,7 +5,8 @@ class {{class_name}} < Crecto::Model
   {% if field.type == "reference" %}
   belongs_to :{{field.name}}, {{field.name | camelcase}}
   {% else %}
-  field {{field.name}}, {{field.cr_type}}
+  field :{{field.name}}, {{field.cr_type}}
+  {% endif %}
   {% endif %}
   {% endfor %}
   end
