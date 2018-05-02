@@ -1,4 +1,8 @@
+{% if database == "sqlite" %}
+require "sqlite3"
+{% else %}
 require "{{ database }}"
+{% endif %}
 require "crecto"
 Query = Crecto::Repo::Query
 
