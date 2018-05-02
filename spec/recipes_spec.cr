@@ -36,4 +36,12 @@ describe "Compile available recipes" do
     cleanup
   end
 
+  it "compiles and tests react/preact_redux recipe" do
+    generate_app recipe: "misc/modular"
+    build_app.should be_true
+    test_app.should be_true
+  ensure
+    cleanup
+  end
+
 end
