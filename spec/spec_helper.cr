@@ -20,6 +20,10 @@ def build_app
   system("cd app && shards build app")
 end
 
+def test_app
+  system("cd app && crystal spec")
+end
+
 def cleanup
   system("rm -rf app")
 end
