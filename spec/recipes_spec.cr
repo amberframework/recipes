@@ -37,7 +37,7 @@ describe "Compile available recipes" do
   end
 
   it "compiles and tests react/preact_redux recipe" do
-    generate_app recipe: "misc/modular"
+    generate_app recipe: "react/preact_redux"
     build_app.should be_true
     test_app.should be_true
   ensure
