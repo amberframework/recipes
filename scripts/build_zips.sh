@@ -29,7 +29,7 @@ check_zip() {
 }
 
 find_recipes() {
-  for f in `find . -name 'app' -type d`
+  for f in `find . -path ./lib -prune -o -name 'app' -print`
   do
     check_zip `dirname $f | sed -e 's#./##'`
   done

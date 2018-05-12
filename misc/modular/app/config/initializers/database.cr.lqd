@@ -6,7 +6,11 @@ Granite::ORM.settings.logger = Amber.settings.logger.dup
 Granite::ORM.settings.logger.progname = "Granite"
 
 {% else %}
+{% if database == "sqlite" %}
+require "sqlite3"
+{% else %}
 require "{{ database }}"
+{% endif %}
 require "crecto"
 Query = Crecto::Repo::Query
 
