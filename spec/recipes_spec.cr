@@ -43,5 +43,4 @@ describe "Compile available recipes" do
   ensure
     cleanup
   end
-
 end
