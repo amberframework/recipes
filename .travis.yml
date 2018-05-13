@@ -3,6 +3,7 @@ language: crystal
 cache:
   directories:
     - amber
+    - dist
 
 env:
   - FILENAME=basic/crecto
