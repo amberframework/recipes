@@ -6,10 +6,10 @@ cache:
     - dist
 
 env:
-  - FILENAME=basic/crecto
-  - FILENAME=basic/granite
+  - FILENAME=basic_crecto
+  - FILENAME=basic_granite
   - FILENAME=default
-  - FILENAME=misc/modular
+  - FILENAME=misc_modular
 
 script:
   - crystal spec "spec/${FILENAME}_spec.cr"
