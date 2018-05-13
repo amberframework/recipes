@@ -15,7 +15,7 @@ script:
   - crystal spec "spec/${FILENAME}_spec.cr"
 
 after_success:
-  - sh -c "scripts/build_zips.sh"
+  - sh "scripts/build_zips.sh"
 
 # notifications:
 #   webhooks:
