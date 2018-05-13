@@ -3,3 +3,33 @@ language: crystal
 cache:
   directories:
     - amber
+
+env:
+  - FILENAME=basic/crecto
+  - FILENAME=basic/granite
+  - FILENAME=default
+  - FILENAME=misc/modular
+
+script:
+  - crystal spec "spec/${FILENAME}_spec.cr"
+
+after_success:
+  - scripts/build_zips.sh
+
+# notifications:
+#   webhooks:
+#     urls:
+#     - https://webhooks.gitter.im/e/8b26d3879e3a6ff4a75c
+#     on_success: change
+#     on_failure: always
+#     on_start: never
+
+deploy:
+  provider: releases
+  api_key: $API_KEY
+  file: "dist/${FILENAME}.zip"
+  skip_cleanup: true
+  on:
+    branch: master
+    repo: faustinoaq/recipes
+    # repo: amberframework/recipes
