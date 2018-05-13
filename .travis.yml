@@ -38,8 +38,7 @@ deploy:
   skip_cleanup: true
   name: Amber Framework Recipes
   body: |
-    Automatic Amber Framework Recipes build of $TRAVIS_BRANCH at
-    ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+    Automatic build of $TRAVIS_BRANCH at ($TRAVIS_COMMIT) built on $(date +'%F %T %Z').
   prerelease: false
   overwrite: true
   target_commitish: $TRAVIS_COMMIT
