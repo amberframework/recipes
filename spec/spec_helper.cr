@@ -27,5 +27,3 @@ end
 def cleanup
   system("rm -rf app")
 end
-
-build_amber
