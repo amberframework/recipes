@@ -7,7 +7,7 @@ build_zip() {
 
   echo build_zip $1, $2, $3
   mkdir -p $2
-  dest=`realpath $2`/$3
+  dest=$2/$3
   (cd $1 && zip -r $dest *)
 }
 
