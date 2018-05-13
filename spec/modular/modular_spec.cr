@@ -1,4 +1,4 @@
-require "./recipes_spec"
+require "../recipes_spec"
 
 describe "Misc Modular" do
   it "compiles and tests misc/modular recipe" do
