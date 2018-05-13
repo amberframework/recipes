@@ -1,4 +1,4 @@
-require "../recipes_spec"
+require "./recipes_spec"
 
 describe "Basic Crecto" do
   # TODO: crecto scaffolding is broken

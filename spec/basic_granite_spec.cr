@@ -1,4 +1,4 @@
-require "../recipes_spec"
+require "./recipes_spec"
 
 describe "Basic Granite" do
   it "compiles and tests basic/granite recipe" do
