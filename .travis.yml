@@ -26,12 +26,13 @@ after_success:
 #     on_start: never
 
 deploy:
+  overwrite: true
   provider: releases
   api_key: $API_KEY
   file: "dist/${FILENAME}.zip"
   skip_cleanup: true
   on:
-    tags: true
+    # tags: true
     branch: master
     repo: faustinoaq/recipes
     # repo: amberframework/recipes
