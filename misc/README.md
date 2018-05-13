@@ -1,6 +1,6 @@
 # Misc recipes
 
-This recipes contain shards with new exiting features and structure.
+These recipes contain shards with new exiting features and structure.
 
 ## Modular
 
