@@ -17,13 +17,13 @@ script:
 after_success:
   - bash "scripts/build_zips.sh"
 
-# notifications:
-#   webhooks:
-#     urls:
-#     - https://webhooks.gitter.im/e/8b26d3879e3a6ff4a75c
-#     on_success: change
-#     on_failure: always
-#     on_start: never
+notifications:
+  webhooks:
+    urls:
+    - https://webhooks.gitter.im/e/8b26d3879e3a6ff4a75c
+    on_success: change
+    on_failure: always
+    on_start: never
 
 before_deploy:
   - git tag -f dist
@@ -43,5 +43,4 @@ deploy:
   target_commitish: $TRAVIS_COMMIT
   on:
     branch: master
-    repo: faustinoaq/recipes
-    # repo: amberframework/recipes
+    repo: amberframework/recipes
