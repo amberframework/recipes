@@ -2,5 +2,6 @@
 /app/
 /lib/
 /bin/
+/dist/
 /.shards/
 shard.lock
