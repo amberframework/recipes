@@ -10,6 +10,7 @@ env:
   - FILENAME=basic_granite
   - FILENAME=default
   - FILENAME=misc_modular
+  - FILENAME=react_preact_redux
 
 script:
   - crystal spec "spec/${FILENAME}_spec.cr"
