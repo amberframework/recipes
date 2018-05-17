@@ -7,7 +7,7 @@ The amber backend serves both html and json.  Also includes a JWT authorisation
 pipe in src/pipes.  Create a new amber app with this template with these commands;
 
 ```
-amber new mynewapp -r react/preact_redux
+amber new mynewapp -r react_preact_redux
 cd mynewapp
 amber g auth User
 ```
