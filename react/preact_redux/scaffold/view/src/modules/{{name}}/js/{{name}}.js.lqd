@@ -98,7 +98,7 @@ export class {{class_name}} extends Component {
 
     return (
       <div>
-      <h2 className="{{name}}-view-title view-title">Show {{class_name}}</h2>
+        <h2 className="{{name}}-view-title view-title">Show {{class_name}}</h2>
 
       {% for field in visible_fields %}
       {% if field.type == "reference" %}
@@ -134,7 +134,7 @@ export class {{class_name}} extends Component {
             </div>
           </div>
         }
-
+      </div>
     );
   }
 }
