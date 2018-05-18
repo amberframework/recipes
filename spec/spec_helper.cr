@@ -21,12 +21,8 @@ def build_app
 end
 
 def test_app
-  formatted? = system("cd app && crystal tool format src config --check")
-  if formatted?
-    system("cd app && crystal spec")
-  else
-    formatted?
-  end
+  system("cd app && crystal tool format  src config --check") &&
+  system("cd app && crystal spec")
 end
 
 def cleanup
