@@ -21,7 +21,7 @@ def build_app
 end
 
 def test_app
-  system("cd app && crystal tool format  src config --check") &&
+  system("cd app && crystal tool format src config spec --check") &&
   system("cd app && crystal spec")
 end
 
