@@ -7,7 +7,7 @@ def build_amber
   end
 end
 
-def generate_app(recipe, template, model = "granite")
+def generate_app(recipe, template = "slang", model = "granite")
   system("./bin/amber new app -r $(pwd)/#{recipe} -d sqlite -t #{template} -m #{model}")
   system("cd app && ../bin/amber g controller Information all")
 
