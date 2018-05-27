@@ -1,4 +1,7 @@
 'use strict';
+
+import Amber from 'amber'; // required by delete button like Rails-UJS
+
 import React from 'react';
 import {render} from 'react-dom';
 import App from './app';
