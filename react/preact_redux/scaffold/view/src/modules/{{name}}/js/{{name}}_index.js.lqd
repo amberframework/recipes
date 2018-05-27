@@ -6,11 +6,11 @@ import { {{class_name}}, {{class_name}}IndexItem} from "./{{name}}";
 export default class {{class_name}}Index extends Component {
 
   componentWillMount() {
-  {% for field in visible_fields %}
-  {% if field.type == "reference" %}
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
     this.props.actions.load{{field.name | camelcase | pluralize}}();
-  {% endif %}
-  {% endfor %}
+  {% endif -%}
+  {% endfor -%}
     this.props.actions.load{{class_name | pluralize}}();
   }
   show{{class_name}}(props) {
@@ -45,9 +45,9 @@ export default class {{class_name}}Index extends Component {
           <table className="table table-striped">
             <thead>
               <tr className="{{name}}-index-table-head-row index-table-head-row">
-              {% for field in visible_fields %}
+              {% for field in visible_fields -%}
                 <th className="{{name}}-index-table-head index-table-head">{{field.name | capitalize }}</th>
-              {% endfor %}
+              {% endfor -%}
                 <th className="{{name}}-index-table-head index-table-head">Actions</th>
               </tr>
             </thead>

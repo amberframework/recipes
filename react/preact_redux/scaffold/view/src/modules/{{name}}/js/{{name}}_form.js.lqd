@@ -24,10 +24,10 @@ export default class {{class_name}}Form extends Component {
 
         <form>
 
-        {% for field in visible_fields %}
+        {% for field in visible_fields -%}
           <div className="form-group">
             <label htmlFor="{{field.name}}">{{field.name | capitalize}}</label>
-            {% if field.type == "text" %}
+            {% if field.type == "text" -%}
             <textarea
               rows={10}
               name="{{field.name}}"
@@ -36,7 +36,7 @@ export default class {{class_name}}Form extends Component {
               value={ this.props.{{name}}.{{field.name}} }
               onChange={this.props.onChange} />
 
-            {% elsif field.type == "boolean" %}
+            {% elsif field.type == "boolean" -%}
             <input type="checkbox"
               name="{{field.name}}"
               className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
@@ -44,7 +44,7 @@ export default class {{class_name}}Form extends Component {
               value={ this.props.{{name}}.{{field.name}} }
               onChange={this.props.onChange}
             />
-            {% elsif field.type == "reference" %}
+            {% elsif field.type == "reference" -%}
             <select
               name="{{field.name}}_id"
               className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
@@ -59,7 +59,7 @@ export default class {{class_name}}Form extends Component {
               })
             }
             </select>
-            {% else %}
+            {% else -%}
             <input
               name="{{field.name}}"
               type="text"
@@ -67,9 +67,9 @@ export default class {{class_name}}Form extends Component {
               id="{{field.name}}"
               value={ this.props.{{name}}.{{field.name}} }
               onChange={this.props.onChange} />
-            {% endif %}
+            {% endif -%}
           </div>
-        {% endfor %}
+        {% endfor -%}
 
           <button
           disabled={this.props.saving}

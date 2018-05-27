@@ -63,11 +63,11 @@ export class {{class_name}} extends Component {
   }
 
   componentWillMount() {
-  {% for field in visible_fields %}
-  {% if field.type == "reference" %}
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
     this.props.actions.load{{field.name | camelcase | pluralize}}();
-  {% endif %}
-  {% endfor %}
+  {% endif -%}
+  {% endfor -%}
   }
 
   render() {
@@ -100,19 +100,19 @@ export class {{class_name}} extends Component {
       <div>
         <h2 className="{{name}}-view-title view-title">Show {{class_name}}</h2>
 
-      {% for field in visible_fields %}
-      {% if field.type == "reference" %}
+      {% for field in visible_fields -%}
+      {% if field.type == "reference" -%}
         <div className="row">
           <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
           <div className="col-sm-10 {{name}}-view-data view-data">{ titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }</div>
         </div>
-      {% else %}
+      {% else -%}
         <div className="row">
           <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
           <div className="col-sm-10 {{name}}-view-data view-data">{ {{name}}.{{field.name}} }</div>
         </div>
-      {% endif %}
-      {% endfor %}
+      {% endif -%}
+      {% endfor -%}
 
         <div onClick={this.props.history.goBack}
         className="btn btn-success btn-xs {{name}}-view-back view-back">
@@ -184,17 +184,17 @@ export class {{class_name}}IndexItem extends Component {
     return (
       <tr className="{{name}}-index-table-row index-table-row" >
 
-      {% for field in visible_fields %}
-        {% if field.type == "reference" %}
+      {% for field in visible_fields -%}
+        {% if field.type == "reference" -%}
         <td
           onClick={ () => this.props.history.push("/{{field.name | pluralize}}/" +{{name}}.{{field.name}}_id ) }
           className="{{name}}-{{field.name}}-index-table-data {{name}}-index-table-data index-table-data">
           { titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }
           </td>
-        {% else %}
+        {% else -%}
         <td className="{{name}}-{{field.name}}-index-table-data {{name}}-index-table-data index-table-data">{ {{name}}.{{field.name}} }</td>
-        {% endif %}
-      {% endfor %}
+        {% endif -%}
+      {% endfor -%}
 
       { canEdit{{class_name}} ? (
         <td className="col {{name}}-index-actions index-actions">

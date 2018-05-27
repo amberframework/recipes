@@ -7,16 +7,16 @@ div.table-responsive.{{name}}-index-table
   table.table.table-striped
     thead
       tr.{{name}}-index-table-head-row.index-table-head-row
-        {% for field in visible_fields %}
+        {% for field in visible_fields -%}
         th.{{name}}-index-table-head.index-table-head {{ field.name | capitalize }}
-        {% endfor %}
+        {% endfor -%}
         th.{{name}}-index-table-head.index-table-head Actions
     tbody
       - {{ name | pluralize }}.each do |{{ name }}|
         tr.{{name}}-index-table-row.index-table-row
-          {% for field in visible_fields %}
-          td.{{name}}-{{field.name}}-index-table-data.{{name}}-index-table-data.index-table-data = {{ name }}.{{ field.name }}{% if field.type == "reference" %}.id{% endif %}
-          {% endfor %}
+          {% for field in visible_fields -%}
+          td.{{name}}-{{field.name}}-index-table-data.{{name}}-index-table-data.index-table-data = {{ name }}.{{ field.name }}{% if field.type == "reference" %}{% if model == "crecto" %}_id{% else %}.id{% endif %}{% endif %}
+          {% endfor -%}
           td.{{name}}-index-actions-column.index-actions-column
             span
             == link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-success btn-xs {{name}}-index-actions-read index-actions-read")

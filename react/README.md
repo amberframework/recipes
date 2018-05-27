@@ -1,4 +1,3 @@
-
 ## preact_redux
 
 A React/Redux SPA using the [Preact](https://preactjs.com) library.

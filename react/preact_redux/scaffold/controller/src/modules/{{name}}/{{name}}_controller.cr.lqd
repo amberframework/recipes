@@ -1,24 +1,24 @@
 class {{ class_name }}Controller < ApplicationController
 
   def index
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     {{ name | pluralize }} = {{ class_name }}.all
-{% else %}
+{% else -%}
     {{ name | pluralize }} = Repo.all({{ class_name }})
-{% endif %}
-    respond_with do
+{% endif -%}
+{{"    "}}respond_with do
       html render_module("index.{{language}}")
       json {{ name | pluralize }}.to_json
     end
   end
 
   def show
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     if {{ name }} = {{ class_name }}.find params["id"]
-{% else %}
+{% else -%}
     if {{ name }} = Repo.get({{ class_name }}, params["id"])
-{% endif %}
-      respond_with do
+{% endif -%}
+{{"      "}}respond_with do
         html render_module("show.{{ language }}")
         json {{ name }}.to_json
       end
@@ -35,10 +35,10 @@ class {{ class_name }}Controller < ApplicationController
   def new
     # only relevant for html content type
     {{ name }} = {{ class_name }}.new
-{% if model == "crecto" %}
-    changeset = {{ class_name }}.changeset({{ name }})
-{% endif %}
-    render_module("new.{{ language }}")
+{% if model == "crecto" -%}
+{{"    "}}changeset = {{ class_name }}.changeset({{ name }})
+{% endif -%}
+{{"    "}}render_module("new.{{ language }}")
   end
 
   def create
@@ -58,7 +58,7 @@ class {{ class_name }}Controller < ApplicationController
       end
 {% else %}
     {{ name }} = {{ class_name }}.new
-    {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!))
+    {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
     changeset = Repo.insert({{ name }})
 
     if changeset.errors.any?
@@ -100,7 +100,7 @@ class {{ class_name }}Controller < ApplicationController
   end
 
   def update
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     if {{ name }} = {{ class_name }}.find params["id"]
       {{ name }}.set_attributes({{ name }}_params.validate!)
       if {{ name }}.valid? && {{ name }}.save
@@ -116,10 +116,10 @@ class {{ class_name }}Controller < ApplicationController
           json error.to_json
         end
       end
-{% else %}
+{% else -%}
     if {{ name }} = Repo.get({{ class_name }}, params["id"])
       changeset = Repo.update({{ name }})
-      {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!))
+      {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
       changeset = Repo.update({{ name }})
 
       if changeset.errors.any?
@@ -136,8 +136,8 @@ class {{ class_name }}Controller < ApplicationController
           json {{ name }}.to_json
         end
       end
-{% endif %}
-    else
+{% endif -%}
+{{"    "}}else
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
       error = {errors: [msg] }
       respond_with 404 do
@@ -154,15 +154,15 @@ class {{ class_name }}Controller < ApplicationController
   end
 
   def destroy
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     if {{ name }} = {{ class_name }}.find params["id"]
       {{ name }}.destroy
-{% else %}
+{% else -%}
     if {{ name }} = Repo.get({{ class_name }}, params["id"])
       Repo.delete({{ name }})
       {{ name }}.on_deleted(name.id)
-{% endif %}
-      msg = "{{ class_name }} with ID #{params["id"]} deleted"
+{% endif -%}
+{{"      "}}msg = "{{ class_name }} with ID #{params["id"]} deleted"
       result = {result: msg}
       respond_with do
         html ->{redirect_to "/{{ name | pluralize }}", flash: {"success" => msg}}
@@ -180,9 +180,9 @@ class {{ class_name }}Controller < ApplicationController
 
   def {{ name }}_params
     params.validation do
-{% for field in visible_fields %}
-      required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %} ) { |f| !f.nil? }
-{% endfor %}
+    {% for field in visible_fields -%}
+    {{"  "}}required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %}) { |f| !f.nil? }
+    {% endfor -%}
     end
   end
 end
