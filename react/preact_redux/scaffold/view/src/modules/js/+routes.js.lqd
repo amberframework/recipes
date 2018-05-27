@@ -1,3 +1,4 @@
+
 import { {{class_name}} } from '../{{name}}/js/{{name}}';
 import {{class_name}}Index from '../{{name}}/js/{{name}}_index';
 const {{class_name | pluralize}}Component = connect(state => ({ {{name | pluralize}}: state.{{name | pluralize}}}), mapDispatchToProps)({{class_name}}Index);

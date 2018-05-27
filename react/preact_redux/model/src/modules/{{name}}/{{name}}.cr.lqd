@@ -30,4 +30,4 @@ class {{class_name}} < Crecto::Model
   {% endfor -%}
   end
 end
-{% endif}
+{% endif -%}

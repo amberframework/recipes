@@ -1,5 +1,4 @@
 class {{ class_name }}Controller < ApplicationController
-
   def index
 {{"    "}}{% if model == "granite" -%}
     {{ name | pluralize }} = {{ class_name }}.all
@@ -24,9 +23,9 @@ class {{ class_name }}Controller < ApplicationController
       end
     else
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
-      error = {errors: [msg] }
+      error = {errors: [msg]}
       respond_with 404 do
-        html ->{redirect_to "{{name | pluralize}}", flash: {"warning" => msg}}
+        html ->{ redirect_to "{{name | pluralize}}", flash: {"warning" => msg} }
         json error.to_json
       end
     end
@@ -41,58 +40,58 @@ class {{ class_name }}Controller < ApplicationController
 {{"    "}}render_module("new.{{ language }}")
   end
 
+  # faustino
   def create
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     {{ name }} = {{ class_name }}.new({{ name }}_params.validate!)
     if {{ name }}.valid? && {{ name }}.save
       respond_with do
-        html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Created {{ class_name }} successfully."}}
+        html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Created {{ class_name }} successfully."} }
         json {{ name }}.to_json
       end
     else
-      error = {errors: {{ name }}.errors.map{|e| e.to_s} }
+      error = {errors: {{ name }}.errors.map { |e| e.to_s }}
       flash["danger"] = "Could not create {{ class_name }}!"
       respond_with 400 do
         html render_module("new.{{ language }}")
         json error.to_json
       end
-{% else %}
+{% else -%}
     {{ name }} = {{ class_name }}.new
     {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
     changeset = Repo.insert({{ name }})
 
     if changeset.errors.any?
-      error = {errors: changeset.errors }
+      error = {errors: changeset.errors}
       flash["danger"] = "Could not create {{ class_name }}!"
       respond_with 400 do
         html render_module("new.{{ language }}")
         json error.to_json
       end
     else
-      {{ name }}.on_created(changeset.changes)
       respond_with do
-        html ->{redirect_to "/{{ name | pluralize }}", flash: {"success" => "Created {{ class_name }} successfully."}}
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"success" => "Created {{ class_name }} successfully."} }
         json {{ name }}.to_json
       end
-{% endif %}
-    end
+{% endif -%}
+{{"    "}}end
   rescue ex
-    error = {errors: [ex.message, params.errors.map{|e| e.message}].flatten}
+    error = {errors: [ex.message, params.errors.map { |e| e.message }].flatten}
     respond_with 400 do
-      html ->{redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not create {{ class_name }}!"}}
+      html ->{ redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not create {{ class_name }}!"} }
       json error.to_json
     end
   end
 
   def edit
     # only relevant for html content type
-{% if model == "granite" %}
+{{"    "}}{% if model == "granite" -%}
     if {{ name }} = {{ class_name }}.find params["id"]
-{% else %}
+{% else -%}
     if {{ name }} = Repo.get({{ class_name }}, params["id"])
       changeset = Repo.update({{ name }})
-{% endif %}
-      render_module("edit.{{ language }}")
+{% endif -%}
+{{"      "}}render_module("edit.{{ language }}")
     else
       flash["warning"] = "{{ class_name }} with ID #{params["id"]} Not Found"
       redirect_to "/{{ name | pluralize }}"
@@ -105,11 +104,11 @@ class {{ class_name }}Controller < ApplicationController
       {{ name }}.set_attributes({{ name }}_params.validate!)
       if {{ name }}.valid? && {{ name }}.save
         respond_with do
-          html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."}}
+          html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."} }
           json {{ name }}.to_json
         end
       else
-        error = {errors: {{ name }}.errors.map{|e| e.to_s} }
+        error = {errors: {{ name }}.errors.map { |e| e.to_s }}
         flash["danger"] = "Could not update {{ class_name }}!"
         respond_with 400 do
           html render_module("edit.{{ language }}")
@@ -123,32 +122,31 @@ class {{ class_name }}Controller < ApplicationController
       changeset = Repo.update({{ name }})
 
       if changeset.errors.any?
-        error = {errors: changeset.errors }
+        error = {errors: changeset.errors}
         flash["danger"] = "Could not update {{ class_name }}!"
         respond_with 400 do
           html render_module("edit.{{ language }}")
           json error.to_json
         end
       else
-        {{ name }}.on_updated(changeset.changes)
         respond_with do
-          html ->{redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."}}
+          html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."} }
           json {{ name }}.to_json
         end
       end
 {% endif -%}
 {{"    "}}else
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
-      error = {errors: [msg] }
+      error = {errors: [msg]}
       respond_with 404 do
-        html ->{redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg}}
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg} }
         json error.to_json
       end
     end
   rescue ex
-    error = {errors: [ex.message, params.errors.map{|e| e.message}].flatten}
+    error = {errors: [ex.message, params.errors.map { |e| e.message }].flatten}
     respond_with 400 do
-      html ->{redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not update {{ class_name }}!"}}
+      html ->{ redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not update {{ class_name }}!"} }
       json error.to_json
     end
   end
@@ -160,19 +158,18 @@ class {{ class_name }}Controller < ApplicationController
 {% else -%}
     if {{ name }} = Repo.get({{ class_name }}, params["id"])
       Repo.delete({{ name }})
-      {{ name }}.on_deleted(name.id)
 {% endif -%}
 {{"      "}}msg = "{{ class_name }} with ID #{params["id"]} deleted"
       result = {result: msg}
       respond_with do
-        html ->{redirect_to "/{{ name | pluralize }}", flash: {"success" => msg}}
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"success" => msg} }
         json result.to_json
       end
     else
       msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
-      error = {errors: [msg] }
+      error = {errors: [msg]}
       respond_with 404 do
-        html ->{redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg}}
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg} }
         json error.to_json
       end
     end

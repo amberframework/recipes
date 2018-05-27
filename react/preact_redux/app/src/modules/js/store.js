@@ -1,7 +1,6 @@
-
-import {applyMiddleware, combineReducers, createStore} from 'redux';
-import {hashHistory} from 'react-router';
-import {routerMiddleware, routerReducer, syncHistoryWithStore} from 'react-router-redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { hashHistory } from 'react-router';
+import { routerMiddleware, routerReducer, syncHistoryWithStore } from 'react-router-redux';
 
 import thunk from 'redux-thunk';
 

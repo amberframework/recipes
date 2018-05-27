@@ -2,15 +2,15 @@ require "jwt"
 
 class HomeController < ApplicationController
   def index
-    if current_user
-      render("app.slang", "spa.slang")
+    if context.current_user
+      render("app.{{ language }}", "spa.{{ language }}")
     else
-      render("index.slang")
+      render("index.{{ language }}")
     end
   end
 
   def me
-    if (user = current_user)
+    if (user = context.current_user)
       token = JWT.encode({id: user.id, email: user.email}, Amber.settings.secret_key_base, "HS256")
       user_hash = {id: user.id, email: user.email}
       {user: user_hash, token: token, csrf: csrf_token}.to_json
@@ -18,12 +18,16 @@ class HomeController < ApplicationController
       context.response.respond_with_error("Bad Request", 400)
     end
   end
-  
+
   def authenticate_jwt
     if params["token"]
       payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
+{{"      "}}{% if model == "granite" -%}
       user = User.find_by(:email, payload["email"].to_s)
-    end
+{% else -%}
+      user = Repo.get_by(User, email: payload["email"].to_s)
+{% endif -%}
+{{"    "}}end
 
     if user
       session[:user_id] = user.id

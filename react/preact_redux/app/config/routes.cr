@@ -16,7 +16,7 @@ Amber::Server.configure do |app|
     # enable this pipe for JWT support however you need a User model
     # 'amber g auth' will create a User model and signin/signup routes
     # it will also add 'plug Authenticate.new' which you should disable
-    #plug AuthenticateJWT.new
+    # plug AuthenticateJWT.new
   end
 
   # All static content will run these transformations

@@ -7,14 +7,18 @@ class AuthenticateJWT < Amber::Pipe::Base
 
   # add the names of the app modules
   REGEX_PATHS = [
-    %r(/some_model_name(/\d+)?$)
+    %r(/some_model_name(/\d+)?$),
   ]
 
   def call(context)
-    if context.params["token"]
+    if context.params["token"]?
       payload, header = JWT.decode(context.params["token"], Amber.settings.secret_key_base, "HS256")
+{{"      "}}{% if model == "granite" -%}
       user = User.find_by(:email, payload["email"].to_s) unless payload["email"]?.nil?
-    end
+{% else -%}
+      user = Repo.get_by(User, email: payload["email"].to_s) unless payload["email"]?.nil?
+{% endif -%}
+{{"    "}}end
 
     if user
       context.current_user = user
@@ -36,7 +40,6 @@ class AuthenticateJWT < Amber::Pipe::Base
     #
     # Example, if only a few private paths exist
     # return false if ["/secret", "/super/secret", "/private"].includes?(path)
-    REGEX_PATHS.count{|r| r.match(path)} > 0
+    REGEX_PATHS.count { |r| r.match(path) } > 0
   end
-
 end
