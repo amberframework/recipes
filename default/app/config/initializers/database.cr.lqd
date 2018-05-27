@@ -1,31 +1,32 @@
-{%- if model == "granite" %}
-require "granite_orm/adapter/{{ database }}"
+{%- if model == "granite" -%}
+require "granite/adapter/{{ database }}"
 
-Granite::ORM.settings.database_url = Amber.settings.database_url
-Granite::ORM.settings.logger = Amber.settings.logger.dup
-Granite::ORM.settings.logger.progname = "Granite"
-{%- else %}
-{% if database == "sqlite" %}
+Granite.settings.database_url = Amber.settings.database_url
+Granite.settings.logger = Amber.settings.logger.dup
+Granite.settings.logger.progname = "Granite"
+{%- else -%}
+{% if database == "sqlite" -%}
 require "sqlite3"
-{% else %}
+{% else -%}
 require "{{ database }}"
-{% endif %}
+{% endif -%}
 require "crecto"
+
 Query = Crecto::Repo::Query
+Multi = Crecto::Multi
 
 module Repo
   extend Crecto::Repo
 
   config do |c|
-  {% if database == "pg" %}
+{{"    "}}{% if database == "pg" -%}
     c.adapter = Crecto::Adapters::Postgres
-  {% elsif database == "mysql" %}
+  {% elsif database == "mysql" -%}
     c.adapter = Crecto::Adapters::Mysql
-  {% elsif database == "sqlite" %}
+  {% elsif database == "sqlite" -%}
     c.adapter = Crecto::Adapters::SQLite3
-  {% endif %}
-
-    c.uri = Amber.settings.database_url
+  {% endif -%}
+  {{"  "}}c.uri = Amber.settings.database_url
   end
 end
 

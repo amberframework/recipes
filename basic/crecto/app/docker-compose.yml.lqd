@@ -1,16 +1,16 @@
-{% if database == "pg" %}
-{% assign db_prefix = "postgres://admin:password@db:5432/" %}
-{% assign db_suffix = "_development" %}
-{% assign wait_for = "while ! nc -q 1 db 5432 </dev/null; do sleep 1; done && " %}
-{% elsif database == "mysql" %}
-{% assign db_prefix = "mysql://admin:password@db:3306" %}
-{% assign db_suffix = "_development" %}
-{% assign wait_for = "while ! nc -q 1 db 3306 </dev/null; do sleep 1; done && " %}
-{% else %}
-{% assign db_prefix = "sqlite3:./db/" %}
-{% assign db_suffix = "_development.db" %}
-{% assign wait_for = "" %}
-{% endif %}
+{% if database == "pg" -%}
+{% assign db_prefix = "postgres://admin:password@db:5432/" -%}
+{% assign db_suffix = "_development" -%}
+{% assign wait_for = "while ! nc -q 1 db 5432 </dev/null; do sleep 1; done && " -%}
+{% elsif database == "mysql" -%}
+{% assign db_prefix = "mysql://admin:password@db:3306" -%}
+{% assign db_suffix = "_development" -%}
+{% assign wait_for = "while ! nc -q 1 db 3306 </dev/null; do sleep 1; done && " -%}
+{% else -%}
+{% assign db_prefix = "sqlite3:./db/" -%}
+{% assign db_suffix = "_development.db" -%}
+{% assign wait_for = "" -%}
+{% endif -%}
 version: '2'
 
 services:
@@ -66,7 +66,6 @@ services:
     volumes:
     - db:/app/local/db
 {% endif %}
-
 volumes:
   db:
   nodes:

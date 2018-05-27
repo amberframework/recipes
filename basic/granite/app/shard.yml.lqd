@@ -25,9 +25,9 @@ dependencies:
     github: amberframework/citrine-i18n
     version: 0.1.0
 
-  granite_orm:
-    github: amberframework/granite-orm
-    version: ~> 0.9.1
+  granite:
+    github: amberframework/granite
+    version: ~> 0.11.0
 
   quartz_mailer:
     github: amberframework/quartz-mailer

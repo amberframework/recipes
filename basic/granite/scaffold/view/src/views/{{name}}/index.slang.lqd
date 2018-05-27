@@ -7,16 +7,16 @@ div.table-responsive
   table.table.table-striped
     thead
       tr
-        {% for field in visible_fields %}
+        {% for field in visible_fields -%}
         th {{ field.name | capitalize }}
-        {% endfor %}
+        {% endfor -%}
         th Actions
     tbody
       - {{ name | pluralize }}.each do |{{ name }}|
         tr
-          {% for field in visible_fields %}
+          {% for field in visible_fields -%}
           td = {{ name }}.{{ field.name }}{% if field.type == "reference" %}.id{% endif %}
-          {% endfor %}
+          {% endfor -%}
           td
             span
             == link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-success btn-xs")
