@@ -20,8 +20,7 @@ def generate_app(recipe, template = "slang", model = "granite")
   if model == "granite"
     system("cd app && ../bin/amber g auth User")
   else
-    # TODO: uncomment after merge https://github.com/amberframework/amber/pull/818
-    # system("cd app && ../bin/amber g model User email:string")
+    system("cd app && ../bin/amber g model User email:string")
   end
 
   system("cd app && ../bin/amber g scaffold Category title:string")
