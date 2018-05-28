@@ -1,13 +1,13 @@
 class {{class_name}} < Crecto::Model
   schema {{table_name}} do
-  {% for field in fields %}
-  {% if field.hidden == false %}
-  {% if field.type == "reference" %}
+  {% for field in fields -%}
+  {% if field.hidden == false -%}
+  {{"  "}}{% if field.type == "reference" -%}
   belongs_to :{{field.name}}, {{field.name | camelcase}}
-  {% else %}
+  {% else -%}
   field :{{field.name}}, {{field.cr_type}}
-  {% endif %}
-  {% endif %}
-  {% endfor %}
+  {% endif -%}
+  {% endif -%}
+  {% endfor -%}
   end
 end

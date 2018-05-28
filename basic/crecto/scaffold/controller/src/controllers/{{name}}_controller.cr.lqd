@@ -1,7 +1,7 @@
 class {{ class_name }}Controller < ApplicationController
-
   def index
     {{ name | pluralize }} = Repo.all({{ class_name }})
+    render("index.{{ language }}")
   end
 
   def show
@@ -72,9 +72,9 @@ class {{ class_name }}Controller < ApplicationController
 
   def {{ name }}_params
     params.validation do
-{% for field in visible_fields %}
-      required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %} ) { |f| !f.nil? }
-{% endfor %}
+    {% for field in visible_fields -%}
+    {{"  "}}required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %}) { |f| !f.nil? }
+    {% endfor -%}
     end
   end
 end
