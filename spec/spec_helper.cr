@@ -9,7 +9,9 @@ end
 
 def generate_app(recipe, template = "slang", model = "granite")
   system("./bin/amber new app -r $(pwd)/#{recipe} -d sqlite -t #{template} -m #{model}")
-  system("cd app && ../bin/amber g controller Information all")
+
+  # FIXME: uncomment after fix https://github.com/amberframework/recipes/issues/19
+  # system("cd app && ../bin/amber g controller Information all")
 
   # TODO: uncomment after https://github.com/amberframework/amber/pull/818 is merged
   # system("cd app && ../bin/amber g model Data title:string body:text")
