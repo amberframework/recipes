@@ -9,12 +9,14 @@ end
 
 def generate_app(recipe, template = "slang", model = "granite")
   system("./bin/amber new app -r $(pwd)/#{recipe} -d sqlite -t #{template} -m #{model}")
-  system("cd app && ../bin/amber g controller Information all")
 
-  # TODO: uncomment after https://github.com/amberframework/amber/pull/818 is merged
+  # TODO: uncoment after merge https://github.com/amberframework/amber/pull/823
+  # system("cd app && ../bin/amber g controller Information all")
+
+  # TODO: uncomment after merge https://github.com/amberframework/amber/pull/818
   # system("cd app && ../bin/amber g model Data title:string body:text")
 
-  # FIXME: see https://github.com/amberframework/amber/pull/815
+  # HACK: fix after merge https://github.com/amberframework/amber/pull/824
   if model == "granite"
     system("cd app && ../bin/amber g auth User")
   else
