@@ -6,13 +6,13 @@ end
 
 def {{ name | underscore }}_params
   params = [] of String
-  {%- for field in visible_fields %}
-  {% if field.type == "reference" %}
-    params << "{{ field.name }}_id=#{ {{ name| underscore }}_hash["{{ field.name }}_id"] }"
-  {% else %}
-    params << "{{ field.name }}=#{ {{ name| underscore }}_hash["{{ field.name }}"] }"
-  {% endif %}
-  {%- endfor %}
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
+  params << "{{ field.name }}_id=#{ {{- name | underscore }}_hash["{{ field.name }}_id"]}"
+  {% else -%}
+  params << "{{ field.name }}=#{ {{- name | underscore }}_hash["{{ field.name }}"]}"
+  {% endif -%}
+  {% endfor -%}
   params.join("&")
 end
 

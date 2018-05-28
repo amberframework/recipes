@@ -1,6 +1,5 @@
-
 require "./spec_helper"
-require "../../src/models/{{name}}.cr"
+require "../../src/models/{{name}}"
 
 describe {{class_name}} do
   Spec.before_each do

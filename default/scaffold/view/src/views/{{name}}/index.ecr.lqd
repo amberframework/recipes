@@ -11,17 +11,17 @@
   <table class="table table-striped">
     <thead>
       <tr>
-{% for field in visible_fields %}
+        {% for field in visible_fields -%}
         <th>{{ field.name | capitalize }}</th>
-{% endfor %}
+        {% endfor -%}
         <th>Actions</th>
       </tr>
     <tbody>
     <%- {{ name | pluralize }}.each do |{{ name }}| %>
       <tr>
-{% for field in visible_fields %}
-        <td><%={{ name }}.{{ field.name }}{% if field.type == "reference" %}.id{% endif %} %></td>
-{% endfor %}
+        {% for field in visible_fields -%}
+        <td><%={{ name }}.{{ field.name }}{% if field.type == "reference" %}{% if model == "crecto" %}_id{% else %}.id{% endif %}{% endif %} %></td>
+        {% endfor -%}
         <td>
           <span>
             <%= link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-primary btn-xs") -%>
