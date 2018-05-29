@@ -55,18 +55,19 @@ export default class Container extends Component {
 
   componentWillMount() {
 
-    if (Auth.isUserAuthenticated()) {
-      this.authenticateWithToken(Auth.getToken());
-    } else {
-      this.authenticateWithRequest();
-    }
-
     EventBus.on('notify:success', (message) => {
       toast.success(message, { autoClose: 5000, position: toast.POSITION.TOP_CENTER })
     });
     EventBus.on('notify:error', (message) => {
       toast.error(message, { autoClose: 10000, position: toast.POSITION.TOP_CENTER })
     });
+
+    if (Auth.isUserAuthenticated()) {
+      this.authenticateWithToken(Auth.getToken());
+    } else {
+      this.authenticateWithRequest();
+    }
+
   }
 
   isAuthenticated() {
@@ -112,7 +113,7 @@ export default class Container extends Component {
                 )
               }
               {this.isAuthenticated() && this.state.current_user ? (
-                <Link className='nav-item pull-right' to='/profile'>{this.state.current_user.email}</Link>
+                <a className='nav-item pull-right' href='/profile'>{this.state.current_user.email}</a>
               ) : (
                   <a className='nav-item pull-right' href='/signup'>Sign Up</a>
                 )

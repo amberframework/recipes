@@ -20,7 +20,11 @@ export const load{{class_name | pluralize}} = () => {
           })
         }
       ).fail((xhr,error) => {
-        EventBus.emit('notify:error', "Could not load {{class_name | pluralize}} - " + xhr.responseJSON.errors.join(', ') );
+        try {
+          EventBus.emit('notify:error', "Could not load {{class_name | pluralize}} - " + xhr.responseJSON.errors.join(', '));
+        } catch (err) {
+          EventBus.emit('notify:error', "Could not load {{class_name | pluralize}} - " + err.message);
+        }
       });
     }
   };

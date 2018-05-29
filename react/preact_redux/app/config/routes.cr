@@ -33,6 +33,7 @@ Amber::Server.configure do |app|
     websocket "/model", ModelSocket
     websocket "/signal", SignalSocket
     get "/", HomeController, :index
+    post "/", HomeController, :token_sign_in_helper
   end
 
   routes :static do

@@ -8,3 +8,39 @@
     <a class="list-group-item list-group-item-action" target="_blank" href="https://crystalshards.xyz">What's hot in Crystal right now</a>
   </div>
 </div>
+
+<%- unless context.current_user -%>
+<div class="col-sm-12">
+  <h2>Sign In with JWT</h2>
+
+  <form action="/" method="post">
+    <%= csrf_tag %>
+    <div class="form-group">
+      <input class="form-control" type="password" name="token" placeholder="Your auth token here"/>
+    </div>
+    <button class="btn btn-primary btn-sm" type="submit">Sign In with Token</button>
+  </form>
+
+  <hr/>
+
+  <p><a href="https://jwt.io/" target="_blank">Don't have a token yet?</a></p>
+
+  <hr/>
+
+  <div class="alert alert-warning">
+    <p>
+    To use auth enable <code>AuthenticateJWT</code> pipe inside
+    <code>config/routes.cr</code>
+    and generate auth forms with
+    <code>amber generate auth</code>.
+    </p>
+    <p>
+    To generate your token use <a href="https://jwt.io/" target="_blank">https://jwt.io/</a>
+    with an existent email and your <code>secret_key_base</code>
+    available inside your environment config file:
+    <code>config/environments/development.yml</code>.
+    Also you can create your own form to generate this token using the JWT package.
+    </p>
+  </div>
+</div>
+<%- end -%>
