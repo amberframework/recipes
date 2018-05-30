@@ -1,0 +1,27 @@
+// styles for this module
+
+.{{name}}-index-column {}
+
+.{{name}}-index-table-head-row {}
+
+.{{name}}-index-table-head {}
+
+.{{name}}-index-table-data {}
+
+.{{name}}-index-actions-row {}
+
+.{{name}}-index-actions {}
+
+.{{name}}-index-actions-read {}
+
+.{{name}}-index-actions-edit {}
+
+.{{name}}-index-actions-delete {}
+
+.{{name}}-view-header {}
+
+.{{name}}-view-data {}
+
+.{{name}}-edit-header {}
+
+.{{name}}-edit-data {}

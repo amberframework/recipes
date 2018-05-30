@@ -1,0 +1,46 @@
+<div id="logo" class="col-sm-6"></div>
+<div class="col-sm-6">
+  <h2><%= t "welcome_to_amber" %></h2>
+  <p>Thank you for trying out the Amber Framework.  We are working hard to provide a super fast and reliable framework that provides all the productivity tools you are used to without sacrificing the speed.</p>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" target="_blank" href="https://docs.amberframework.org">Getting Started with Amber Framework</a>
+    <a class="list-group-item list-group-item-action" target="_blank" href="https://github.com/veelenga/awesome-crystal">List of Awesome Crystal projects and shards</a>
+    <a class="list-group-item list-group-item-action" target="_blank" href="https://crystalshards.xyz">What's hot in Crystal right now</a>
+  </div>
+</div>
+
+<%- unless context.current_user -%>
+<div class="col-sm-12">
+  <h2>Sign In with JWT</h2>
+
+  <form action="/" method="post">
+    <%= csrf_tag %>
+    <div class="form-group">
+      <input class="form-control" type="password" name="token" placeholder="Your auth token here"/>
+    </div>
+    <button class="btn btn-primary btn-sm" type="submit">Sign In with Token</button>
+  </form>
+
+  <hr/>
+
+  <p><a href="https://jwt.io/" target="_blank">Don't have a token yet?</a></p>
+
+  <hr/>
+
+  <div class="alert alert-warning">
+    <p>
+    To use auth enable <code>AuthenticateJWT</code> pipe inside
+    <code>config/routes.cr</code>
+    and generate auth forms with
+    <code>amber generate auth</code>.
+    </p>
+    <p>
+    To generate your token use <a href="https://jwt.io/" target="_blank">https://jwt.io/</a>
+    with an existent email and your <code>secret_key_base</code>
+    available inside your environment config file:
+    <code>config/environments/development.yml</code>.
+    Also you can create your own form to generate this token using the JWT package.
+    </p>
+  </div>
+</div>
+<%- end -%>

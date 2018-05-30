@@ -1,0 +1,96 @@
+'use strict';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+import {optionsForClass} from '../../../lib/js/utils';
+import Resource from '../../../lib/js/resource';
+import {store} from '../../js/store';
+
+export default class {{class_name}}Form extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.options = {};
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="row {{name}}-form-title-row form-title-row">
+          <div className="col-sm-11">
+            <h2 className="{{name}}-form-title form-title">{{class_name}}</h2>
+          </div>
+        </div>
+
+        <form>
+
+        {% for field in visible_fields -%}
+          <div className="form-group">
+            <label htmlFor="{{field.name}}">{{field.name | capitalize}}</label>
+            {% if field.type == "text" -%}
+            <textarea
+              rows={10}
+              name="{{field.name}}"
+              className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
+              id="{{field.name}}"
+              value={ this.props.{{name}}.{{field.name}} }
+              onChange={this.props.onChange} />
+
+            {% elsif field.type == "boolean" -%}
+            <input type="checkbox"
+              name="{{field.name}}"
+              className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
+              id="{{field.name}}"
+              value={ this.props.{{name}}.{{field.name}} }
+              onChange={this.props.onChange}
+            />
+            {% elsif field.type == "reference" -%}
+            <select
+              name="{{field.name}}_id"
+              className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
+              id="{{field.name}}_id"
+              value={ this.props.{{name}}.{{field.name}}_id }
+              onChange={this.props.onChange}
+            >
+            { optionsForClass(store, "{{field.name | pluralize}}").map((opt) => {
+                return (
+                  <option value={opt.value}>{opt.name}</option>
+                )
+              })
+            }
+            </select>
+            {% else -%}
+            <input
+              name="{{field.name}}"
+              type="text"
+              className="form-control {{name}}-{{field.name}}-form-data {{name}}-form-data form-data"
+              id="{{field.name}}"
+              value={ this.props.{{name}}.{{field.name}} }
+              onChange={this.props.onChange} />
+            {% endif -%}
+          </div>
+        {% endfor -%}
+
+          <button
+          disabled={this.props.saving}
+          onClick={this.props.onSave}
+          type="submit"
+          className="{{name}}-form-save-button form-save-button btn btn-primary btn-xs">
+            Submit
+          </button>
+          <div onClick={this.props.history.goBack}
+          className="{{name}}-form-back-button form-back-button btn btn-default btn-xs">
+            Back
+          </div>
+        </form>
+      </div>
+    )
+  }
+}
+
+{{class_name}}Form.propTypes = {
+  {{name}}: PropTypes.object.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+};

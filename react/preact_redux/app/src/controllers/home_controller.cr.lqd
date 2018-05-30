@@ -1,0 +1,72 @@
+require "jwt"
+
+class HomeController < ApplicationController
+  def index
+    if context.current_user
+      render("app.{{ language }}", "spa.{{ language }}")
+    else
+      render("index.{{ language }}")
+    end
+  end
+
+  def token_sign_in_helper
+    if token = params["token"]?
+      payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
+      email = payload["email"].to_s
+{{"      "}}{% if model == "granite" -%}
+      user = User.find_by(:email, email)
+{% else -%}
+      user = Repo.get_by(User, email: email)
+{% endif -%}
+{{"    "}}end
+
+    if user
+      session[:user_id] = user.id
+      render("app.{{language}}", "spa.{{language}}")
+    else
+      flash[:warning] = "User with email #{email} doesn't exist. Try Sign up"
+      render("index.{{language}}")
+    end
+  rescue ex
+    flash[:danger] = ex.message.to_s
+    render("index.{{language}}")
+  end
+
+  def me
+    user_id = context.session["user_id"]?
+{{"    "}}{% if model == "granite" -%}
+      user = User.find(user_id)
+{% else -%}
+      user = Repo.get(User, user_id)
+{% endif -%}
+{{"    "}}if user
+      token = JWT.encode({id: user.id, email: user.email}, Amber.settings.secret_key_base, "HS256")
+      user_hash = {id: user.id, email: user.email}
+      {user: user_hash, token: token, csrf: csrf_token}.to_json
+    else
+      context.response.respond_with_error("Bad Request", 400)
+    end
+  end
+
+  def authenticate_jwt
+    if params["token"]
+      payload, header = JWT.decode(params["token"], Amber.settings.secret_key_base, "HS256")
+      email = payload["email"].to_s
+{{"      "}}{% if model == "granite" -%}
+      user = User.find_by(:email, email)
+{% else -%}
+      user = Repo.get_by(User, email: email)
+{% endif -%}
+{{"    "}}end
+
+    if user
+      session[:user_id] = user.id
+      # create a new token for this session
+      user_hash = {id: user.id, email: user.email}
+      token = JWT.encode(user_hash, Amber.settings.secret_key_base, "HS256")
+      {user: user_hash, token: token, csrf: csrf_token}.to_json
+    else
+      context.response.respond_with_error("Bad Request", 400)
+    end
+  end
+end

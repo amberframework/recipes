@@ -1,0 +1,54 @@
+class HTTP::Server::Context
+  property current_user : User?
+end
+
+class AuthenticateJWT < Amber::Pipe::Base
+  PUBLIC_PATHS = ["/", "/signin", "/session", "/signup", "/registration", "/me"]
+
+  # add the names of the app modules
+  REGEX_PATHS = [
+    %r(/categories(/\d+)?$),
+    %r(/products(/\d+)?$),
+    %r(/comments(/\d+)?$),
+    %r(/some_model_name(/\d+)?$),
+  ]
+
+  def call(context)
+    if context.params["token"]?
+      payload, header = JWT.decode(context.params["token"], Amber.settings.secret_key_base, "HS256")
+{{"      "}}{% if model == "granite" -%}
+      user = User.find_by(:email, payload["email"].to_s) unless payload["email"]?.nil?
+{% else -%}
+      user = Repo.get_by(User, email: payload["email"].to_s) unless payload["email"]?.nil?
+{% endif -%}
+{{"    "}}end
+
+    if user
+      context.current_user = user
+      call_next(context)
+    else
+      return call_next(context) if public_path?(context.request.path, context.session["user_id"]?)
+      context.flash[:warning] = "Please Sign In"
+      context.response.headers.add "Location", "/signin"
+      context.response.status_code = 302
+    end
+  end
+
+  private def public_path?(path, user_id)
+    return true if PUBLIC_PATHS.includes?(path)
+
+    # Different strategies can be used to determine if a path is public
+    # Example, if /admin/* paths are the only private paths
+    # return false if path.starts_with?("/admin")
+    #
+    # Example, if only a few private paths exist
+    # return false if ["/secret", "/super/secret", "/private"].includes?(path)
+{{"    "}}{% if model == "granite" -%}
+    if User.find(user_id)
+{% else -%}
+    if Repo.get(User, user_id)
+{% endif -%}
+{{"      "}}REGEX_PATHS.count { |r| r.match(path) } > 0
+    end
+  end
+end

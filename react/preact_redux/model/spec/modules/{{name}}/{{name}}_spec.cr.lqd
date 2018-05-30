@@ -1,0 +1,13 @@
+require "./spec_helper"
+require "../../../src/modules/{{name}}/{{name}}"
+
+describe {{class_name}} do
+  Spec.before_each do
+  {% if model == "granite" -%}
+  {{"  "}}{{class_name}}.clear
+  {% else -%}
+  {{"  "}}multi = Multi.new
+  {{"  "}}multi.delete_all({{class_name}})
+  {% endif -%}
+  end
+end

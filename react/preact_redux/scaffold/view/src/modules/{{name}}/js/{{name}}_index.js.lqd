@@ -1,0 +1,72 @@
+'use strict';
+import React, {Component} from 'react';
+
+import { {{class_name}}, {{class_name}}IndexItem} from "./{{name}}";
+
+export default class {{class_name}}Index extends Component {
+
+  componentWillMount() {
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
+    this.props.actions.load{{field.name | camelcase | pluralize}}();
+  {% endif -%}
+  {% endfor -%}
+    this.props.actions.load{{class_name | pluralize}}();
+  }
+  show{{class_name}}(props) {
+    this.props.actions.show{{class_name}}(props.{{name}});
+  }
+  new{{class_name}}(props) {
+    this.props.actions.new{{class_name}}(props.{{name}});
+  }
+  edit{{class_name}}(props) {
+    this.props.actions.edit{{class_name}}(props.{{name}});
+  }
+  delete{{class_name}}(props) {
+    this.props.actions.delete{{class_name}}(props.{{name}});
+  }
+
+  render() {
+    return (
+      <div className="col-sm-12 main">
+        <div className="row {{name}}-index-title-row index-title-row">
+          <div className="col-sm-11">
+            <h2 className="{{name}}-index-title index-title">{{display_name | pluralize}}</h2>
+          </div>
+          <div className="col-sm-1">
+            <div onClick={this.new{{class_name}}.bind(this)}
+              className="{{name}}-index-new-button index-new-button btn btn-success btn-xs">
+              New
+            </div>
+          </div>
+        </div>
+
+        <div className="table-responsive {{name}}-index-table">
+          <table className="table table-striped">
+            <thead>
+              <tr className="{{name}}-index-table-head-row index-table-head-row">
+              {% for field in visible_fields -%}
+                <th className="{{name}}-index-table-head index-table-head">{{field.name | capitalize }}</th>
+              {% endfor -%}
+                <th className="{{name}}-index-table-head index-table-head">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              { this.props.{{name | pluralize }} &&
+                  this.props.{{name | pluralize }}.map({{name}} => {
+                  return <{{class_name}}IndexItem {{name}}={ {{name}} }
+                    show{{class_name}}={this.show{{class_name}}.bind(this)}
+                    edit{{class_name}}={this.edit{{class_name}}.bind(this)}
+                    delete{{class_name}}={this.delete{{class_name}}.bind(this)}
+                    key={ {{name}}.id }/>;
+                }
+              )
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )
+  }
+}

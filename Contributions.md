@@ -20,3 +20,7 @@ amber new mynewapp -r default
 ### Miscellaneous
 [misc](https://github.com/amberframework/recipes/blob/master/misc)
 - modular (organizes model,controller,views in modules)
+
+### React
+[react](https://github.com/amberframework/recipes/blob/master/misc)
+- preact_redux (React SPA using the Preact library - modular)

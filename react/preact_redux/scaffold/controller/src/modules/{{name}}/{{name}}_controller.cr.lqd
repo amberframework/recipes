@@ -1,0 +1,185 @@
+class {{ class_name }}Controller < ApplicationController
+  def index
+{{"    "}}{% if model == "granite" -%}
+    {{ name | pluralize }} = {{ class_name }}.all
+{% else -%}
+    {{ name | pluralize }} = Repo.all({{ class_name }})
+{% endif -%}
+{{"    "}}respond_with do
+      html render_module("index.{{language}}")
+      json {{ name | pluralize }}.to_json
+    end
+  end
+
+  def show
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+{% endif -%}
+{{"      "}}respond_with do
+        html render_module("show.{{ language }}")
+        json {{ name }}.to_json
+      end
+    else
+      msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
+      error = {errors: [msg]}
+      respond_with 404 do
+        html ->{ redirect_to "{{name | pluralize}}", flash: {"warning" => msg} }
+        json error.to_json
+      end
+    end
+  end
+
+  def new
+    # only relevant for html content type
+    {{ name }} = {{ class_name }}.new
+{% if model == "crecto" -%}
+{{"    "}}changeset = {{ class_name }}.changeset({{ name }})
+{% endif -%}
+{{"    "}}render_module("new.{{ language }}")
+  end
+
+  # faustino
+  def create
+{{"    "}}{% if model == "granite" -%}
+    {{ name }} = {{ class_name }}.new({{ name }}_params.validate!)
+    if {{ name }}.valid? && {{ name }}.save
+      respond_with do
+        html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Created {{ class_name }} successfully."} }
+        json {{ name }}.to_json
+      end
+    else
+      error = {errors: {{ name }}.errors.map { |e| e.to_s }}
+      flash["danger"] = "Could not create {{ class_name }}!"
+      respond_with 400 do
+        html render_module("new.{{ language }}")
+        json error.to_json
+      end
+{% else -%}
+    {{ name }} = {{ class_name }}.new
+    {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
+    changeset = Repo.insert({{ name }})
+
+    if changeset.errors.any?
+      error = {errors: changeset.errors}
+      flash["danger"] = "Could not create {{ class_name }}!"
+      respond_with 400 do
+        html render_module("new.{{ language }}")
+        json error.to_json
+      end
+    else
+      respond_with do
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"success" => "Created {{ class_name }} successfully."} }
+        json {{ name }}.to_json
+      end
+{% endif -%}
+{{"    "}}end
+  rescue ex
+    error = {errors: [ex.message, params.errors.map { |e| e.message }].flatten}
+    respond_with 400 do
+      html ->{ redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not create {{ class_name }}!"} }
+      json error.to_json
+    end
+  end
+
+  def edit
+    # only relevant for html content type
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+      changeset = Repo.update({{ name }})
+{% endif -%}
+{{"      "}}render_module("edit.{{ language }}")
+    else
+      flash["warning"] = "{{ class_name }} with ID #{params["id"]} Not Found"
+      redirect_to "/{{ name | pluralize }}"
+    end
+  end
+
+  def update
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+      {{ name }}.set_attributes({{ name }}_params.validate!)
+      if {{ name }}.valid? && {{ name }}.save
+        respond_with do
+          html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."} }
+          json {{ name }}.to_json
+        end
+      else
+        error = {errors: {{ name }}.errors.map { |e| e.to_s }}
+        flash["danger"] = "Could not update {{ class_name }}!"
+        respond_with 400 do
+          html render_module("edit.{{ language }}")
+          json error.to_json
+        end
+      end
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+      changeset = Repo.update({{ name }})
+      {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
+      changeset = Repo.update({{ name }})
+
+      if changeset.errors.any?
+        error = {errors: changeset.errors}
+        flash["danger"] = "Could not update {{ class_name }}!"
+        respond_with 400 do
+          html render_module("edit.{{ language }}")
+          json error.to_json
+        end
+      else
+        respond_with do
+          html ->{ redirect_to "/{{name | pluralize}}", flash: {"success" => "Updated {{ class_name }} successfully."} }
+          json {{ name }}.to_json
+        end
+      end
+{% endif -%}
+{{"    "}}else
+      msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
+      error = {errors: [msg]}
+      respond_with 404 do
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg} }
+        json error.to_json
+      end
+    end
+  rescue ex
+    error = {errors: [ex.message, params.errors.map { |e| e.message }].flatten}
+    respond_with 400 do
+      html ->{ redirect_to "/{{ name | pluralize }}", flash: {"danger" => "Could not update {{ class_name }}!"} }
+      json error.to_json
+    end
+  end
+
+  def destroy
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+      {{ name }}.destroy
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+      Repo.delete({{ name }})
+{% endif -%}
+{{"      "}}msg = "{{ class_name }} with ID #{params["id"]} deleted"
+      result = {result: msg}
+      respond_with do
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"success" => msg} }
+        json result.to_json
+      end
+    else
+      msg = "Error {{ class_name }} with ID #{params["id"]} Not Found"
+      error = {errors: [msg]}
+      respond_with 404 do
+        html ->{ redirect_to "/{{ name | pluralize }}", flash: {"warning" => msg} }
+        json error.to_json
+      end
+    end
+  end
+
+  def {{ name }}_params
+    params.validation do
+    {% for field in visible_fields -%}
+    {{"  "}}required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %}) { |f| !f.nil? }
+    {% endfor -%}
+    end
+  end
+end

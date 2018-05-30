@@ -61,6 +61,10 @@ dependencies:
     version: ~> 0.9.0
 {% endif %}
 
+  jwt:
+    github: crystal-community/jwt
+    version: ~> 0.2.3
+
 development_dependencies:
   garnet_spec:
     github: amberframework/garnet-spec

@@ -1,0 +1,99 @@
+'use strict';
+import {push, replace, goBack} from 'react-router-redux';
+import * as ACTION_TYPES from '../../js/action-types';
+
+import EventBus from '../../../lib/js/eventBus';
+import Resource from '../../../lib/js/resource';
+
+export const load{{class_name | pluralize}} = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (state.{{name | pluralize }} && state.{{name | pluralize }}.length) {
+      return;
+    } else {
+      let resource = new Resource("/{{name | pluralize }}");
+
+      resource.all().then({{name | pluralize }} => {
+          dispatch({
+            type: ACTION_TYPES.ACTION_LOAD_{{name | pluralize | upcase}},
+            payload: {{name | pluralize }}
+          })
+        }
+      ).fail((xhr,error) => {
+        try {
+          EventBus.emit('notify:error', "Could not load {{class_name | pluralize}} - " + xhr.responseJSON.errors.join(', '));
+        } catch (err) {
+          EventBus.emit('notify:error', "Could not load {{class_name | pluralize}} - " + err.message);
+        }
+      });
+    }
+  };
+};
+
+
+export const show{{class_name}} = {{name}} => {
+  return dispatch => {
+    dispatch({
+      type: ACTION_TYPES.ACTION_SHOW_{{name | upcase}},
+      payload: {{name}}
+    });
+    dispatch(push('/{{name | pluralize }}/' + {{name}}.id));
+  };
+};
+
+export const new{{class_name}} = {{name}} => {
+  return dispatch => {
+    console.log('new {{name}} action', {{name}})
+    dispatch({
+      type: ACTION_TYPES.ACTION_NEW_{{name | upcase}},
+      payload: {}
+    });
+    dispatch(push('/{{name | pluralize }}/new'));
+  };
+};
+
+export const edit{{class_name}} = {{name}} => {
+  return dispatch => {
+    console.log('edit {{name}} action', {{name}})
+    dispatch({
+      type: ACTION_TYPES.ACTION_EDIT_{{name | upcase}},
+      payload: {{name}}
+    });
+    dispatch(push('/{{name | pluralize }}/' + {{name}}.id + '/edit'));
+  };
+};
+
+export const save{{class_name}} = {{name}} => {
+  return dispatch => {
+    console.log('update {{name}} action', {{name}})
+
+    let resource = new Resource("/{{name | pluralize }}", {{name}});
+    resource.save().then({{name}} => {
+      EventBus.emit('notify:success', "Saved {{class_name}} successfully" );
+      dispatch({
+        type: ACTION_TYPES.ACTION_SAVE_{{name | upcase}},
+        payload: {{name}}
+      });
+    }).fail((xhr,error) => {
+      console.log('save post error', xhr)
+      EventBus.emit('notify:error', "Could not save {{class_name}} - " + xhr.responseJSON.errors.join(', ') );
+    });
+  };
+}
+
+export const delete{{class_name}} = {{name}} => {
+  return dispatch => {
+    let resource = new Resource("/{{name | pluralize }}", {{name}});
+    resource.destroy().then(() => {
+      EventBus.emit('notify:success', "Deleted {{class_name}} successfully" );
+      dispatch({
+        type: ACTION_TYPES.ACTION_DELETE_{{name | upcase}},
+        payload: {{name}}
+      });
+      dispatch(replace('/{{name | pluralize }}/'));
+    }).fail((xhr,error) => {
+      EventBus.emit('notify:error', "Could not delete {{class_name}} - " + xhr.responseJSON.errors.join(', ') );
+    });
+
+  };
+};

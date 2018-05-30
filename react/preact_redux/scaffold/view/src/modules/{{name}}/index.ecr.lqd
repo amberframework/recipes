@@ -1,0 +1,36 @@
+<div class="row {{name}}-index-title-row index-title-row">
+  <div class="col-sm-11">
+    <h2 class="{{name}}-index-title index-title">{{ display_name | pluralize }}</h2>
+  </div>
+  <div class="col-sm-1">
+    <a class="{{name}}-index-new-button index-new-button btn btn-success btn-xs" href="/{{ name | pluralize }}/new">New</a>
+  </div>
+</div>
+
+<div class="table-responsive {{name}}-index-table">
+  <table class="table table-striped">
+    <thead>
+      <tr class="{{name}}-index-table-head-row index-table-head-row">
+        {% for field in visible_fields -%}
+        <th class="{{name}}-index-table-head index-table-head">{{ field.name | capitalize }}</th>
+        {% endfor -%}
+        <th class="{{name}}-index-table-head index-table-head">Actions</th>
+      </tr>
+    <tbody>
+    <%- {{ name | pluralize }}.each do |{{ name }}| %>
+      <tr class="{{name}}-index-table-row.index-table-row">
+        {% for field in visible_fields -%}
+        <td class="{{name}}-{{field.name}}-index-table-data {{name}}-index-table-data index-table-data"><%={{ name }}.{{ field.name }}{% if field.type == "reference" %}{% if model == "crecto" %}_id{% else %}.id{% endif %}{% endif %} %></td>
+        {% endfor -%}
+        <td class="{{name}}-index-actions-column index-actions-column">
+          <span>
+            <%= link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-success btn-xs {{name}}-index-actions-read index-actions-read") -%>
+            <%= link_to("edit", "/{{ name | pluralize }}/#{ {{ name }}.id }/edit", class: "btn btn-success btn-xs {{name}}-index-actions-edit index-actions-edit") -%>
+            <%= link_to("delete", "/{{ name | pluralize }}/#{ {{ name }}.id }?_csrf=#{csrf_token}", "data-method": "delete", "data-confirm": "Are you sure?", class: "btn btn-danger btn-xs {{name}}-index-actions-delete index-actions-delete") -%>
+          </span>
+        </td>
+      </tr>
+    <%- end %>
+    </tbody>
+  </table>
+</div>

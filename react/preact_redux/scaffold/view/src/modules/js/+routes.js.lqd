@@ -1,0 +1,10 @@
+
+import { {{class_name}} } from '../{{name}}/js/{{name}}';
+import {{class_name}}Index from '../{{name}}/js/{{name}}_index';
+const {{class_name | pluralize}}Component = connect(state => ({ {{name | pluralize}}: state.{{name | pluralize}}}), mapDispatchToProps)({{class_name}}Index);
+const {{class_name}}Component = connect(state => ({ {{name}}: state.{{name}}}), mapDispatchToProps)({{class_name}});
+
+routes.push({path: "/{{name | pluralize}}", exact: true, type: 'index', name: "{{display_name | pluralize}}",  component: {{class_name | pluralize}}Component})
+routes.push({path: "/{{name | pluralize}}/:id", type: 'show', name: "{{class_name}}",   component: {{class_name}}Component})
+routes.push({path: "/{{name | pluralize}}/:id/edit", type: 'edit', name: "{{class_name}}",   component: {{class_name}}Component})
+routes.push({path: "/{{name | pluralize}}/new", type: 'new', name: "{{class_name}}",   component: {{class_name}}Component})

@@ -16,9 +16,16 @@ def generate_app(recipe, template = "slang", model = "granite")
   # TODO: uncomment after merge https://github.com/amberframework/amber/pull/818
   # system("cd app && ../bin/amber g model Data title:string body:text")
 
-  system("cd app && ../bin/amber g scaffold Category title:string")
-  system("cd app && ../bin/amber g scaffold Product title:string description:text category:reference")
-  system("cd app && ../bin/amber g scaffold Comment body:text product:reference")
+  # HACK: fix after merge https://github.com/amberframework/amber/pull/824
+  if model == "granite"
+    system("cd app && ../bin/amber g auth User")
+  else
+    system("cd app && ../bin/amber g model User email:string")
+  end
+
+  system("cd app && ../bin/amber g scaffold Category title:string user_id")
+  system("cd app && ../bin/amber g scaffold Product title:string description:text category:reference user_id")
+  system("cd app && ../bin/amber g scaffold Comment body:text product:reference user_id")
   system("cd app && ../bin/amber db migrate")
   system("cd app && crystal tool format src config spec --check")
 end

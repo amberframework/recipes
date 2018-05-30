@@ -1,0 +1,145 @@
+require "./spec_helper"
+
+def {{ name | underscore }}_hash
+  {{ fields_hash }}
+end
+
+def {{ name | underscore }}_params
+  params = [] of String
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
+  params << "{{ field.name }}_id=#{ {{- name | underscore }}_hash["{{ field.name }}_id"]}"
+  {% else -%}
+  params << "{{ field.name }}=#{ {{- name | underscore }}_hash["{{ field.name }}"]}"
+  {% endif -%}
+  {% endfor -%}
+  params.join("&")
+end
+
+def create_{{ name | underscore }}
+  {% if model == "crecto" -%}
+  model = {{ class_name }}.new
+  model.update_from_hash({{ name | underscore }}_hash)
+  Repo.insert(model)
+  Repo.get({{ class_name }}, 1).not_nil!
+{% else -%}
+  model = {{ class_name }}.new({{ name | underscore }}_hash)
+  model.save
+  model
+{% endif -%}
+end
+
+class {{ class_name }}ControllerTest < GarnetSpec::Controller::Test
+  getter handler : Amber::Pipe::Pipeline
+
+  def initialize
+    @handler = Amber::Pipe::Pipeline.new
+    @handler.build :web do
+      plug Amber::Pipe::Error.new
+      plug Amber::Pipe::Session.new
+      plug Amber::Pipe::Flash.new
+    end
+    @handler.prepare_pipelines
+  end
+end
+
+describe {{ class_name }}ControllerTest do
+  subject = {{ class_name }}ControllerTest.new
+
+  it "renders {{ name }} index template" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    response = subject.get "/{{ name | pluralize }}"
+
+    response.status_code.should eq(200)
+    response.body.should contain("{{ display_name | pluralize }}")
+  end
+
+  it "renders {{ name }} show template" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    model = create_{{ name | underscore }}
+    location = "/{{ name | pluralize }}/#{model.id}"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("Show {{ display_name }}")
+  end
+
+  it "renders {{ name }} new template" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    location = "/{{ name | pluralize }}/new"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("New {{ display_name }}")
+  end
+
+  it "renders {{ name }} edit template" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    model = create_{{ name | underscore }}
+    location = "/{{ name | pluralize }}/#{model.id}/edit"
+
+    response = subject.get location
+
+    response.status_code.should eq(200)
+    response.body.should contain("Edit {{ display_name }}")
+  end
+
+  it "creates a {{ name }}" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    response = subject.post "/{{ name | pluralize }}", body: {{ name | underscore }}_params
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+
+  it "updates a {{ name }}" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    model = create_{{ name | underscore }}
+    response = subject.patch "/{{ name | pluralize }}/#{model.id}", body: {{ name | underscore }}_params
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+
+  it "deletes a {{ name }}" do
+    {% if model == "granite" -%}
+    {{ class_name }}.clear
+    {% else -%}
+    Repo.delete_all({{ class_name }})
+    {% endif -%}
+    model = create_{{ name | underscore }}
+    response = subject.delete "/{{ name | pluralize }}/#{model.id}"
+
+    response.headers["Location"].should eq "/{{ name | pluralize }}"
+    response.status_code.should eq(302)
+    response.body.should eq "302"
+  end
+end

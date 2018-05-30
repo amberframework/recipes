@@ -1,0 +1,230 @@
+'use strict';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import { confirmAlert } from 'react-confirm-alert';
+import Auth from '../../../lib/js/auth';
+import {canEditItem, titleForId} from '../../../lib/js/utils';
+import {store} from '../../js/store';
+
+import {{class_name}}Form from './{{name}}_form';
+
+export class {{class_name}} extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {isEditing: false, {{name}}: this.props.{{name}}};
+
+    this.options = {};
+
+    this.toggleEdit = this.toggleEdit.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+  }
+
+  toggleEdit() {
+    this.setState({isEditing: !this.state.isEditing})
+  }
+
+  onChange(event) {
+    const field = event.target.name;
+    const {{name}} = this.state.{{name}};
+    {{name}}[field] = event.target.value;
+    return this.setState({ {{name}}: {{name}} });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    this.props.actions.save{{class_name}}(this.state.{{name}});
+  }
+
+  confirmDelete() {
+    let vm = this;
+
+    confirmAlert({
+      title: 'Confirm Delete {{class_name}}',
+      message: 'Are you sure?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {vm.props.actions.delete{{class_name}}(vm.props.{{name}})}
+        },
+        {
+          label: 'No',
+          onClick: () => {console.log('delete cancelled')}
+        }
+      ]
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.{{name}}.id != nextProps.{{name}}.id) {
+      this.setState({ {{name}}: nextProps.{{name}} });
+    }
+  }
+
+  componentWillMount() {
+  {% for field in visible_fields -%}
+  {% if field.type == "reference" -%}
+    this.props.actions.load{{field.name | camelcase | pluralize}}();
+  {% endif -%}
+  {% endfor -%}
+  }
+
+  render() {
+
+    if (this.props.params.id) {
+      let paths = ["/{{name | pluralize }}/" + this.props.params.id + "/edit",
+        "/{{name | pluralize }}/new"];
+
+      if (paths.includes(this.props.location.pathname) ) {
+        this.state.isEditing = true;
+      }
+    }
+
+    let {{name}} = this.state.{{name}};
+
+    if (this.state.isEditing) {
+      return (
+        <{{class_name}}Form
+          {{name}}={this.state.{{name}}}
+          onSave={this.onSubmit}
+          onChange={this.onChange}
+          history={this.props.history}
+        />
+      )
+    }
+
+    let canEdit{{class_name}} = canEditItem({{name}});
+
+    return (
+      <div>
+        <h2 className="{{name}}-view-title view-title">Show {{class_name}}</h2>
+
+      {% for field in visible_fields -%}
+      {% if field.type == "reference" -%}
+        <div className="row">
+          <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
+          <div className="col-sm-10 {{name}}-view-data view-data">{ titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }</div>
+        </div>
+      {% else -%}
+        <div className="row">
+          <div className="col-sm-2 {{name}}-view-header view-header">{{ field.name | capitalize }}</div>
+          <div className="col-sm-10 {{name}}-view-data view-data">{ {{name}}.{{field.name}} }</div>
+        </div>
+      {% endif -%}
+      {% endfor -%}
+
+        <div onClick={this.props.history.goBack}
+        className="btn btn-success btn-xs {{name}}-view-back view-back">
+          Back
+        </div>
+
+        { canEdit{{class_name}} &&
+          <div>
+            <div
+              onClick={this.toggleEdit}
+              className="btn btn-success btn-xs {{name}}-view-edit view-edit">
+              edit
+            </div>
+
+            <div
+              onClick={this.confirmDelete}
+              className="btn btn-danger btn-xs {{name}}-view-delete view-delete">
+              delete
+            </div>
+          </div>
+        }
+      </div>
+    );
+  }
+}
+
+{{class_name}}.propTypes = {
+  {{name}}: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
+};
+
+export class {{class_name}}IndexItem extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.confirmDelete = this.confirmDelete.bind(this);
+  }
+
+  confirmDelete() {
+    let vm = this;
+    let { delete{{class_name}} } = this.props;
+
+    confirmAlert({
+      title: 'Confirm Delete {{class_name}}',
+      message: 'Are you sure?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {delete{{class_name}}(vm.props)}
+        },
+        {
+          label: 'No',
+          onClick: () => {console.log('delete cancelled')}
+        }
+      ]
+    })
+  }
+
+  render() {
+    let {edit{{class_name}}, delete{{class_name}}, show{{class_name}}} = this.props;
+    let {{name}} = {};
+
+    if (this.props.{{name}}) {
+      {{name}} = this.props.{{name}};
+    }
+
+    let canEdit{{class_name}} = canEditItem({{name}});
+
+    return (
+      <tr className="{{name}}-index-table-row index-table-row" >
+
+      {% for field in visible_fields -%}
+        {% if field.type == "reference" -%}
+        <td
+          onClick={ () => this.props.history.push("/{{field.name | pluralize}}/" +{{name}}.{{field.name}}_id ) }
+          className="{{name}}-{{field.name}}-index-table-data {{name}}-index-table-data index-table-data">
+          { titleForId(store, {{name}}.{{field.name}}_id, "{{field.name | pluralize}}") }
+          </td>
+        {% else -%}
+        <td className="{{name}}-{{field.name}}-index-table-data {{name}}-index-table-data index-table-data">{ {{name}}.{{field.name}} }</td>
+        {% endif -%}
+      {% endfor -%}
+
+      { canEdit{{class_name}} ? (
+        <td className="col {{name}}-index-actions index-actions">
+          <div onClick={()=>show{{class_name}}(this.props)}
+          className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
+          >read</div>
+
+          <div onClick={()=>edit{{class_name}}(this.props)}
+          className="col btn btn-success btn-xs {{name}}-index-actions-edit index-actions-edit"
+          >edit</div>
+
+          <div onClick={this.confirmDelete}
+          className="col btn btn-danger btn-xs {{name}}-index-actions-delete index-actions-delete"
+            >
+            delete
+          </div>
+        </td>
+      ) : (
+        <td className="col {{name}}-index-actions index-actions">
+          <div onClick={()=>show{{class_name}}(this.props)}
+          className="col btn btn-success btn-xs {{name}}-index-actions-read index-actions-read"
+          >read</div>
+        </td>
+      )
+
+      }
+
+
+      </tr>
+
+    );
+  }
+}

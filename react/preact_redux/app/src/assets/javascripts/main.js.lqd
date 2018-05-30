@@ -1,0 +1,15 @@
+'use strict';
+
+import Amber from 'amber'; // required by delete button like Rails-UJS
+
+import React from 'react';
+import {render} from 'react-dom';
+import App from './app';
+
+document.addEventListener('DOMContentLoaded', function() {
+  let componentEntry = document.getElementById("{{name}}_app");
+  if (componentEntry) {
+    render(<App />,
+        document.getElementById("{{name}}_app"));
+  }
+});
