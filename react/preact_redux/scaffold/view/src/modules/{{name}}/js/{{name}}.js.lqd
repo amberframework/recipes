@@ -199,15 +199,15 @@ export class {{class_name}}IndexItem extends Component {
       { canEdit{{class_name}} ? (
         <td className="col {{name}}-index-actions index-actions">
           <div onClick={()=>show{{class_name}}(this.props)}
-          className="col btn btn-success btn-sm {{name}}-index-actions-read index-actions-read"
+          className="btn btn-primary btn-xs {{name}}-index-actions-read index-actions-read"
           >read</div>
 
           <div onClick={()=>edit{{class_name}}(this.props)}
-          className="col btn btn-success btn-sm {{name}}-index-actions-edit index-actions-edit"
+          className="btn btn-success btn-xs {{name}}-index-actions-edit index-actions-edit"
           >edit</div>
 
           <div onClick={this.confirmDelete}
-          className="col btn btn-danger btn-sm {{name}}-index-actions-delete index-actions-delete"
+          className="btn btn-danger btn-xs {{name}}-index-actions-delete index-actions-delete"
             >
             delete
           </div>
@@ -215,7 +215,7 @@ export class {{class_name}}IndexItem extends Component {
       ) : (
         <td className="col {{name}}-index-actions index-actions">
           <div onClick={()=>show{{class_name}}(this.props)}
-          className="col btn btn-success btn-sm {{name}}-index-actions-read index-actions-read"
+          className="btn btn-primary btn-xs {{name}}-index-actions-read index-actions-read"
           >read</div>
         </td>
       )

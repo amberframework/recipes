@@ -19,6 +19,6 @@
           {% endfor -%}
           td.{{name}}-index-actions-column.index-actions-column
             span
-            == link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-success btn-sm {{name}}-index-actions-read index-actions-read")
-            == link_to("edit", "/{{ name | pluralize }}/#{ {{ name }}.id }/edit", class: "btn btn-success btn-sm {{name}}-index-actions-edit index-actions-edit")
-            == link_to("delete", "/{{ name | pluralize }}/#{ {{ name }}.id }?_csrf=#{csrf_token}", "data-method": "delete", "data-confirm": "Are you sure?", class: "btn btn-danger btn-sm {{name}}-index-actions-delete index-actions-delete" )
+            == link_to("read", "/{{ name | pluralize }}/#{ {{ name }}.id }", class: "btn btn-primary btn-xs {{name}}-index-actions-read index-actions-read")
+            == link_to("edit", "/{{ name | pluralize }}/#{ {{ name }}.id }/edit", class: "btn btn-success btn-xs {{name}}-index-actions-edit index-actions-edit")
+            == link_to("delete", "/{{ name | pluralize }}/#{ {{ name }}.id }?_csrf=#{csrf_token}", "data-method": "delete", "data-confirm": "Are you sure?", class: "btn btn-danger btn-xs {{name}}-index-actions-delete index-actions-delete" )
