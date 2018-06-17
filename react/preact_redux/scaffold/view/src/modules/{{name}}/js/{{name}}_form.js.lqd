@@ -80,7 +80,7 @@ export default class {{class_name}}Form extends Component {
           </button>
           <div onClick={this.props.history.goBack}
           className="{{name}}-form-back-button form-back-button btn btn-light btn-sm">
-            Back
+            back
           </div>
         </form>
       </div>

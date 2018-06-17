@@ -140,6 +140,10 @@ h6, .h6 {
   padding-bottom: 10px;
 }
 
+.btn {
+  margin: 5px 5px 5px 0;
+}
+
 @import './modules.scss';
 @import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css';
 @import '../../../node_modules/react-toastify/dist/ReactToastify.css';
