@@ -15,9 +15,6 @@ env:
 script:
   - crystal spec "spec/${FILENAME}_spec.cr"
 
-after_success:
-  - bash "scripts/build_zips.sh"
-
 notifications:
   webhooks:
     urls:
@@ -27,6 +24,7 @@ notifications:
     on_start: never
 
 before_deploy:
+  - bash "scripts/build_zips.sh"
   - git tag -f dist
   - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${API_KEY}@github.com/${TRAVIS_REPO_SLUG}.git
   - git push -f gh dist
