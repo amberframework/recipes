@@ -17,7 +17,7 @@ class AuthenticateJWT < Amber::Pipe::Base
     if context.params["token"]?
       payload, header = JWT.decode(context.params["token"], Amber.settings.secret_key_base, "HS256")
 {{"      "}}{% if model == "granite" -%}
-      user = User.find_by(:email, payload["email"].to_s) unless payload["email"]?.nil?
+      user = User.find_by(email: payload["email"].to_s) unless payload["email"]?.nil?
 {% else -%}
       user = Repo.get_by(User, email: payload["email"].to_s) unless payload["email"]?.nil?
 {% endif -%}
