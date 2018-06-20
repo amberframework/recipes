@@ -10,8 +10,6 @@ Amber::Server.configure do |app|
     plug Amber::Pipe::Session.new
     plug Amber::Pipe::Flash.new
     plug Amber::Pipe::CSRF.new
-    # Reload clients browsers (development only)
-    plug Amber::Pipe::Reload.new if Amber.env.development?
 
     # enable this pipe for JWT support however you need a User model
     # 'amber g auth' will create a User model and signin/signup routes

@@ -19,11 +19,13 @@
 
     <div class="container">
       <div class="row">
-        <%- flash.each do |key, value| %>
-          <div class="alert alert-<%= key %>">
-            <p><%= flash[key] %></p>
-          </div>
-        <%- end %>
+        <div class="col-sm">
+          <%- flash.each do |key, value| %>
+            <div class="alert alert-<%= key %>">
+              <p><%= flash[key] %></p>
+            </div>
+          <%- end %>
+        </div>
       </div>
 
       <div class="row">
@@ -35,6 +37,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <% if Amber.env.development? %><script src="/js/amber_reload.js"></script><% end %>
     <script src="/dist/main.bundle.js"></script>
   </body>
 </html>
