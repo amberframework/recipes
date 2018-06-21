@@ -35,7 +35,7 @@ export default class {{class_name}}Index extends Component {
           </div>
           <div className="col-sm-1">
             <div onClick={this.new{{class_name}}.bind(this)}
-              className="{{name}}-index-new-button index-new-button btn btn-success btn-xs">
+              className="{{name}}-index-new-button index-new-button btn btn-success btn-sm">
               New
             </div>
           </div>

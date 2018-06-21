@@ -20,8 +20,7 @@ def create_{{ name | underscore }}
   {% if model == "crecto" -%}
   model = {{ class_name }}.new
   model.update_from_hash({{ name | underscore }}_hash)
-  Repo.insert(model)
-  Repo.get({{ class_name }}, 1).not_nil!
+  Repo.insert(model).instance
 {% else -%}
   model = {{ class_name }}.new({{ name | underscore }}_hash)
   model.save

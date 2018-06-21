@@ -107,15 +107,15 @@ export default class Container extends Component {
               }
 
               {this.isAuthenticated() && this.state.current_user ? (
-                <div className='nav-item pull-right' onClick={this.signOut}>Sign Out</div>
+                <a className='nav-item nav-item-auth nav-item-auth-signout' href='/signout' onClick={this.signOut}>Sign Out</a>
               ) : (
-                  <a className='nav-item pull-right' href='/signin'>Sign In</a>
+                  <a className='nav-item nav-item-auth nav-item-auth-signin' href='/signin'>Sign In</a>
                 )
               }
               {this.isAuthenticated() && this.state.current_user ? (
-                <a className='nav-item pull-right' href='/profile'>{this.state.current_user.email}</a>
+                <a className='nav-item nav-item-auth nav-item-auth-profile' href='/profile'>{this.state.current_user.email}</a>
               ) : (
-                  <a className='nav-item pull-right' href='/signup'>Sign Up</a>
+                  <a className='nav-item nav-item-auth nav-item-auth-signup' href='/signup'>Sign Up</a>
                 )
               }
 
