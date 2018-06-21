@@ -19,8 +19,7 @@ end
 def create_{{ name | underscore }}
   model = {{ class_name }}.new
   model.update_from_hash({{ name | underscore }}_hash)
-  Repo.insert(model)
-  Repo.get({{ class_name }}, 1).not_nil!
+  Repo.insert(model).instance
 end
 
 class {{ class_name }}ControllerTest < GarnetSpec::Controller::Test
