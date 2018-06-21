@@ -75,12 +75,12 @@ export default class {{class_name}}Form extends Component {
           disabled={this.props.saving}
           onClick={this.props.onSave}
           type="submit"
-          className="{{name}}-form-save-button form-save-button btn btn-primary btn-xs">
+          className="{{name}}-form-save-button form-save-button btn btn-primary btn-sm">
             Submit
           </button>
           <div onClick={this.props.history.goBack}
-          className="{{name}}-form-back-button form-back-button btn btn-default btn-xs">
-            Back
+          className="{{name}}-form-back-button form-back-button btn btn-light btn-sm">
+            back
           </div>
         </form>
       </div>
