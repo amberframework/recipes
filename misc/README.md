@@ -23,3 +23,16 @@ Create a new amber app with this template with the command;
 ```
 amber new mynewapp -r misc_modular
 ```
+
+## API-only
+
+Created by [Slava Dzyba](https://github.com/sdzyba).
+
+A recipe that configures Amber to serve as an API framework.
+That is, everything that is not required for an API functionality is disabled or removed.
+
+Create a new amber app with this template with the command;
+
+```
+amber new mynewapp -r misc/api
+```

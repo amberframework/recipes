@@ -1,0 +1,7 @@
+class HomeController < ApplicationController
+  def index
+    respond_with 200 do
+      json "Welcome to {{ name }}".to_json
+    end
+  end
+end

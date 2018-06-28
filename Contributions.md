@@ -20,6 +20,7 @@ amber new mynewapp -r default
 ### Miscellaneous
 [misc](https://github.com/amberframework/recipes/blob/master/misc)
 - modular (organizes model,controller,views in modules)
+- api (API-only template)
 
 ### React
 [react](https://github.com/amberframework/recipes/blob/master/misc)

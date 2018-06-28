@@ -1,0 +1,5 @@
+type: app
+database: {{ database }}
+model: {{ model }}
+recipe: {{ recipe }}
+api_only: true
