@@ -1,0 +1,10 @@
+FROM amberframework/amber:v{{ amber_version }}
+
+WORKDIR /app
+
+COPY shard.* /app/
+RUN crystal deps
+
+COPY . /app
+
+CMD amber watch

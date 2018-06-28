@@ -1,0 +1,10 @@
+require "./spec_helper"
+
+describe {{class_name}}Controller do
+{{"  "}}{% for action in action_names -%}
+  describe "{{class_name}}Controller#{{action}}" do
+    it "renders the view" do
+    end
+  end
+{% endfor -%}
+end

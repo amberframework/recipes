@@ -1,0 +1,122 @@
+class {{ class_name }}Controller < ApplicationController
+  def index
+{{"    "}}{% if model == "granite" -%}
+    {{ name | pluralize }} = {{ class_name }}.all
+{% else -%}
+    {{ name | pluralize }} = Repo.all({{ class_name }})
+{% endif -%}
+    respond_with 200 do
+      json {{ name | pluralize }}.to_json
+    end
+  end
+
+  def show
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+{% endif -%}
+{{"      "}}render("show.{{ language }}")
+    else
+      results = {status: "not found"}
+      respond_with 404 do
+        json results.to_json
+      end
+    end
+  end
+
+  def create
+{{"    "}}{% if model == "granite" -%}
+    {{ name }} = {{ class_name }}.new({{ name }}_params.validate!)
+    if {{ name }}.valid? && {{ name }}.save
+      respond_with 201 do
+        json {{ name }}.to_json
+      end
+    else
+      results = {status: "invalid"}
+      respond_with 422 do
+        json results.to_json
+      end
+{% else -%}
+    {{ name }} = {{ class_name }}.new
+    {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
+    changeset = Repo.insert({{ name }})
+    if changeset.errors.any?
+      results = {status: "invalid"}
+      respond_with 422 do
+        json results.to_json
+      end
+    else
+      respond_with 201 do
+        json {{ name }}.to_json
+      end
+{% endif -%}
+{{"    "}}end
+  end
+
+  def update
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find(params["id"])
+      {{ name }}.set_attributes({{ name }}_params.validate!)
+      if {{ name }}.valid? && {{ name }}.save
+        respond_with 200 do
+          json {{ name }}.to_json
+        end
+      else
+        results = {status: "invalid"}
+        respond_with 422 do
+          json results.to_json
+        end
+      end
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+      changeset = Repo.update({{ name }})
+      {{ name }}.update_from_hash(params.to_h.select({{ name }}_params.validate!.keys).compact)
+      changeset = Repo.update({{ name }})
+
+      if changeset.errors.any?
+        results = {status: "invalid"}
+        respond_with 422 do
+          json results.to_json
+        end
+      else
+        respond_with 201 do
+          json {{ name }}.to_json
+        end
+      end
+{% endif -%}
+{{"    "}}else
+      results = {status: "not found"}
+      respond_with 404 do
+        json results.to_json
+      end
+    end
+  end
+
+  def destroy
+{{"    "}}{% if model == "granite" -%}
+    if {{ name }} = {{ class_name }}.find params["id"]
+      {{ name }}.destroy
+{% else -%}
+    if {{ name }} = Repo.get({{ class_name }}, params["id"])
+      Repo.delete({{ name }})
+{% endif -%}
+      respond_with 204 do
+        json ""
+      end
+    else
+      results = {status: "not found"}
+      respond_with 404 do
+        json results.to_json
+      end
+    end
+  end
+
+  def {{ name }}_params
+    params.validation do
+    {% for field in visible_fields -%}
+    {{"  "}}required(:{{ field.name }}{% if field.type == "reference" %}_id{% endif %}) { |f| !f.nil? }
+    {% endfor -%}
+    end
+  end
+end
