@@ -1,0 +1,33 @@
+{% assign id_field_type = "Primary32" -%}
+{% assign has_reference = false -%}
+{% for field in fields -%}
+  {% if field.name == "id" -%}
+    {% assign id_field_type = field.cr_type -%}
+  {% elsif field.type == "reference" or field.type == "ref" -%}
+    {% assign has_reference = true -%}
+  {% endif -%}
+{% endfor -%}
+class {{class_name}} < ApplicationRecord
+  with_timestamps
+
+  mapping(
+    id: {{id_field_type}},
+  {% for field in fields -%}
+  {%- if field.name != "id" -%}
+  {% if field.type == "reference" -%}
+  {{"  "}}{{ field.name }}_id: {type: Int32?},
+  {% else -%}
+  {{"  "}}{{ field.name }}: {type: {{ field.cr_type }}?},
+  {% endif -%}
+  {% endif -%}
+  {% endfor -%}
+  )
+{% if has_reference -%}
+{{""}}
+{% endif -%}
+{% for field in fields -%}
+{% if field.type == "reference" -%}
+{{"  "}}belongs_to :{{ field.name }}, {{ field.name | camelcase }}
+{% endif -%}
+{% endfor -%}
+end

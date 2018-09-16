@@ -15,6 +15,7 @@ amber new <appname> -r <recipe>
 to create a new amber app from the given named recipe in a folder with the given appname.
 
 The given recipe can be either
+
 - a recipe from this repository
 - a directory with an application template
 - a URL pointing to a recipe folder (which should contain an app template)
@@ -35,7 +36,7 @@ amber new newapp -r basic_granite
 ```
 
 to create a new amber app from the recipe at basic_granite in the
-folder newapp.  
+folder newapp.
 
 ```sh
 amber new newapp -r default
@@ -48,6 +49,7 @@ amber new newapp
 ```
 
 ## Using a template in a local folder
+
 You can use a local folder as the source template for a new amber application e.g.
 
 ```sh

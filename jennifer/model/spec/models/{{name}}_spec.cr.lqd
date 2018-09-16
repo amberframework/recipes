@@ -1,0 +1,7 @@
+require "./spec_helper"
+require "../../src/models/{{name}}"
+
+describe {{class_name}} do
+  pending "add tests for {{class_name}}" do
+  end
+end

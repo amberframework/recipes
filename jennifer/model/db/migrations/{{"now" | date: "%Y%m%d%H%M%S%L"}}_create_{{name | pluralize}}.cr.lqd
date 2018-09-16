@@ -1,0 +1,29 @@
+class Create{{class_name}} < Jennifer::Migration::Base
+  def up
+    create_table :{{name | pluralize}} do |t|
+      {% for field in fields -%}
+      {% assign method = "" -%}
+      {% if field.name == "id" or field.name == "created_at" or field.name == "updated_at" -%}
+      {% elsif filed.type == "time" -%}
+        {% assign method = "timestamp" -%}
+      {% elsif field.type == "boolean" -%}
+        {% assign method = "bool" -%}
+      {% elsif field.type == "real" -%}
+        {% assign method = "double" -%}
+      {% elsif field.type == "password" -%}
+        {% assign method = "string" -%}
+      {% else -%}
+        {% assign method = field.type -%}
+      {% endif -%}
+      {% if method != "" -%}
+      t.{{method}} :{{field.name}}
+      {% endif -%}
+      {% endfor -%}
+      t.timestamps
+    end
+  end
+
+  def down
+    drop_table :{{name | pluralize}}
+  end
+end

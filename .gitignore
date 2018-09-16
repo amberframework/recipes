@@ -5,3 +5,4 @@
 /dist/
 /.shards/
 shard.lock
+/.idea

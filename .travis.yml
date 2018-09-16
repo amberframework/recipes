@@ -1,5 +1,11 @@
 language: crystal
 
+services:
+  - postgresql
+
+addons:
+  postgresql: 9.4
+
 cache:
   directories:
     - amber
@@ -8,6 +14,7 @@ cache:
 env:
   - FILENAME=basic_crecto
   - FILENAME=basic_granite
+  - FILENAME=jennifer
   - FILENAME=default
   - FILENAME=misc_modular
   - FILENAME=react_preact_redux

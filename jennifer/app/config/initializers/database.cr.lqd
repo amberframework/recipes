@@ -1,0 +1,32 @@
+require "jennifer"
+{% if database == "pg" -%}
+require "jennifer/adapter/postgres"
+{% else -%}
+require "jennifer/adapter/{{database}}
+{% endif -%}
+
+# If you want to specify extra environment related settings you may pass them
+# to the environment file and read them from there:
+#
+# Jennifer::Config.read("./app/config/environments/#{Amber.env}.yml", &.["database"])
+
+Jennifer::Config.configure do |conf|
+  # Reads url specified settings defined in app/config/environments/<environment>.yml
+  conf.from_uri(Amber.settings.database_url)
+  conf.logger = Amber.settings.logger.dup
+  conf.logger.progname = "Jennifer"
+  {% if database == "pg" -%}
+  conf.adapter = "postgres"
+  {% else -%}
+  conf.adapter = "{{ database }}"
+  {% endif -%}
+  # Specify migrations location directory for generator
+  conf.migration_files_path = "./db/migrations"
+
+  # Following lines allows using dockerized database.
+  #
+  # conf.port = 11009
+  # conf.docker_container = "<container_name_here>"
+  # conf.command_shell = "docker"
+  # conf.command_shell_sudo = true
+end
