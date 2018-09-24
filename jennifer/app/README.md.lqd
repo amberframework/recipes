@@ -16,11 +16,21 @@ This project requires [Crystal](https://crystal-lang.org/) ([installation guide]
 
 ## Development
 
+It might be a good idea to setup Sam Makefile alias to simplify commands
+
+```shell
+crystal sam.cr -- generate:makefile
+```
+
+This allows to reduce `crystal sam.cr -- command:name` to `make sam command:name`. For more details take a look at [Sam readme](https://github.com/imdrasil/sam.cr).
+
+### Amber
+
 To start your Amber server:
 
 1. Install dependencies with `shards install`
 2. Build executables with `shards build`
-3. Create and migrate your database with `crystal sam.cr -- db:create @ db:migrate`. Also see [creating the database](https://github.com/imdrasil/jennifer.cr/blob/master/docs/migration.md).
+3. Create and migrate your database with `make sam db:setup`. Also see [creating the database](https://github.com/imdrasil/jennifer.cr/blob/master/docs/migration.md).
 4. Start Amber server with `bin/amber watch`
 
 Now you can visit http://localhost:3000/ from your browser.
@@ -29,13 +39,43 @@ Getting an error message you need help decoding? Check the [Amber troubleshootin
 
 Using Docker? Please check [Amber Docker guides](https://docs.amberframework.org/amber/guides/docker).
 
+### Jennifer
+
+All db-related configurations are located in `config/database.cr`. Most configuration options are read from the
+`config/environments/<env_name>.yml` file - `database_url` attribute includes all basic data to connect to database.
+
+To run db-related Sam task you should specify Amber environment you want to affect.
+
+```shell
+AMBER_ENV=test make sam db:setup
+```
+
+By default `development` environment is used.
+
+All migrations are located in `db/migrations` folder. Migration generation will trigger both sql and Jennifer DSL migration generating -
+remove one you don't need. ATM this behavior can't be configured.
+
+To convert `Hash(String, String)` input http parameters use `Jennifer::Mode::Base.build_params` - it automatically converts values to key's defined
+datatype.
+
+For further reading please check [Jennifer guides](https://github.com/imdrasil/jennifer.cr/blob/master/docs/index.md)
+
 ## Tests
+
+Before the first invocation of the test suites don't forget to setup database.
+
+```
+AMBER_ENV=test make sam db:setup
+```
 
 To run the test suite:
 
 ```
 crystal spec
 ```
+
+Each test case by default are wrapped in a transaction and count of db connection is set to 1. If you want to run tests in parallel -
+change cleaning logic to using manual transaction or anything you consider reasonable.
 
 ## Contributing
 
